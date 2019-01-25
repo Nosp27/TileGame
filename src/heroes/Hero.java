@@ -1,9 +1,8 @@
 package heroes;
 
-import map.Location;
+import map.locations.Location;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

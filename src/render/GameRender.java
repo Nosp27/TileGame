@@ -1,6 +1,7 @@
 package render;
 
-import javafx.scene.input.KeyCode;
+import map.MapGenerator;
+import map.locations.Location;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +16,13 @@ public class GameRender extends JPanel{
     int offsetX = 0;
     int offsetY = 0;
 
-    Image[][] map;
+    LocationSprite[][] map;
 
-    public GameRender(){
+    private MapGenerator generator;
+
+    public GameRender(MapGenerator gen){
+        generator = gen;
+
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -42,45 +47,27 @@ public class GameRender extends JPanel{
         System.out.println("out");
 
         if(map == null)
-        map = getMap(17);
+        map = getMap(generator);
 
         for(int i = 0; i < map.length; ++i){
             for(int j = 0; j < map[i].length; ++j){
-                g.drawImage(map[i][j], j * sizeX - offsetX, i * sizeY + offsetY, sizeX, sizeY, null);
+                map[i][j].draw(g, j * sizeX - offsetX, i * sizeY + offsetY, sizeX, sizeY);
             }
         }
     }
 
-    Image[][] getMap(int size){
-        Image[][] map = new Image[size][size];
-        for(int i = 0; i < map.length; ++i){
-            for(int j = 0; j < map[i].length; ++j){
+    LocationSprite[][] getMap(MapGenerator generator){
+        Location[][] map = generator.getMap();
+        final int size = map.length;
+
+        LocationSprite[][] renderMap = new LocationSprite[size][size];
+        for(int i = 0; i < renderMap.length; ++i){
+            for(int j = 0; j < renderMap[i].length; ++j){
+                //spawn next location
                 int index = r.nextInt(3) + 1;
-                map[i][j] = new ImageIcon("res/tiles/test_tile" + index + ".jpg").getImage();
+                renderMap[i][j] = new LocationSprite(map[i][j], "res/tiles/test_tile" + index + ".jpg");
             }
         }
-        return map;
-    }
-
-    public static void main(String[] args) {
-        new Frame();
-    }
-}
-
-class Frame extends JFrame {
-    GameRender mainPanel;
-
-    public Frame(){
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setExtendedState(MAXIMIZED_BOTH);
-
-        mainPanel = new GameRender();
-        mainPanel.setBackground(Color.BLACK);
-        mainPanel.setVisible(true);
-        add(mainPanel);
-        mainPanel.setFocusable(true);
-        setFocusable(false);
-
-        setVisible(true);
+        return renderMap;
     }
 }
