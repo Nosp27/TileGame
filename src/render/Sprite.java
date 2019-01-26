@@ -10,6 +10,7 @@ import java.io.IOException;
 public abstract class Sprite {
     protected BufferedImage image;
     private Rectangle rect;
+    public int order;
 
     public Rectangle getRect() {
         return rect;
@@ -20,6 +21,7 @@ public abstract class Sprite {
     }
 
     protected Sprite(String imagePath){
+        order = 0;
         try{
             image = ImageIO.read(new File(imagePath));
             rect = new Rectangle(image.getWidth(), image.getHeight());
@@ -29,12 +31,26 @@ public abstract class Sprite {
         }
     }
 
+    protected Sprite(String imagePath, int order){
+        this(imagePath);
+        this.order = order;
+    }
+
     void draw(Graphics g, int x, int y, int w, int h){
+        if(w == 0)
+            w = image.getWidth();
+        if(h == 0)
+            h = image.getHeight();
+
         rect = new Rectangle(x,y,w,h);
         g.drawImage(image, x, y, w, h, null);
     }
 
     Boolean checkClick(Point mouseCords){
         return rect.contains(mouseCords);
+    }
+
+    void onClick(){
+
     }
 }

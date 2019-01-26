@@ -8,6 +8,22 @@ import java.util.List;
 import java.util.Map;
 
 public class Hero {
+    int x,y;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    String pathName;
+
+    public String getPathName() {
+        return pathName;
+    }
+
     //mortal sins
     public enum MortalSins {
         ANGER,
@@ -52,6 +68,7 @@ public class Hero {
         return bestChoice;
     }
 
+    //return map for
     protected Map<Location, Float> calculatePreferedLocation(List<Location> variants) {
         //TODO: implement preferences
         throw new NotImplementedException();

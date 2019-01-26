@@ -10,7 +10,12 @@ public class LocationSprite extends Sprite{
     }
 
     public LocationSprite(Location _location, String imagePath){
-        super(imagePath);
+        super(imagePath, -100);
         location = _location;
+    }
+
+    @Override
+    void onClick(){
+        System.out.println("tile "+ location.toString() + " clicked");
     }
 }

@@ -11,8 +11,8 @@
 .mtj.tmp/
 
 # Imgs
-*.jpg
-*.png
+!.jpg
+!.png
 
 # Package Files #
 *.jar
