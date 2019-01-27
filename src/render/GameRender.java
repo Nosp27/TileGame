@@ -3,6 +3,9 @@ package render;
 import heroes.Hero;
 import map.MapGenerator;
 import map.locations.Location;
+import render.UI.UI_Button;
+import render.UI.UI_Panel;
+import render.UI.UI_Sprite;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -27,27 +30,40 @@ public class GameRender extends JPanel {
     LocationSprite[][] map;
 
     List<HeroSprite> heroes;
+    List<UI_Sprite> ui_sprites;
+
+    UI_Panel ctxMenuPanel;
+    UI_Button ctx_btn;
 
     private MapGenerator generator;
 
     public GameRender(MapGenerator gen) {
         generator = gen;
         heroes = new LinkedList<>();
+        ui_sprites = new LinkedList<>();
+
+        ctxMenuPanel = new UI_Panel("res/UI/ui_panel.png");
+        ctx_btn = new UI_Button("res/UI/ui_button.png", this::repaint);
+        ctxMenuPanel.addChild(ctx_btn);
+
+        ui_sprites.add(ctxMenuPanel);
+        ui_sprites.add(ctx_btn);
+
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 switch (e.getKeyChar()) {
                     case 'd':
-                        offsetX += 50;
+                        offsetX += sizeX;
                         break;
                     case 'a':
-                        offsetX -= 50;
+                        offsetX -= sizeX;
                         break;
                     case 'w':
-                        offsetY += 50;
+                        offsetY += sizeY;
                         break;
                     case 's':
-                        offsetY -= 50;
+                        offsetY -= sizeY;
                         break;
                     default:
                         return;
@@ -60,23 +76,26 @@ public class GameRender extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                //hideTileMenu();
 
                 switch (e.getButton()) {
                     case MouseEvent.BUTTON1:
-                        List<Sprite> clicked = new LinkedList<>();
-                        for (Sprite s : getAllSprites())
+                        LinkedList<Sprite> clicked = new LinkedList<>();
+                        getAllSprites().forEach(s ->
+                        {
                             if (s.checkClick(e.getPoint()))
                                 clicked.add(s);
+                        });
 
                         if (clicked.size() == 0)
                             return;
 
                         clicked.sort(Comparator.comparingInt(o -> o.order));
-                        ((LinkedList<Sprite>) clicked).getFirst().onClick();
+                        clicked.getLast().onClick();
                         break;
 
                     case MouseEvent.BUTTON3:
-                        List<Sprite> clickedMap = new LinkedList<>();
+                        LinkedList<Sprite> clickedMap = new LinkedList<>();
                         for (Sprite[] ss : map)
                             for (Sprite s : ss)
                                 if (s.checkClick(e.getPoint()))
@@ -85,17 +104,35 @@ public class GameRender extends JPanel {
                         if (clickedMap.size() == 0)
                             return;
 
-                        clickedMap.sort(Comparator.comparingInt(o -> o.order));
-                        ((LinkedList<Sprite>) clickedMap).getFirst().onClick();
+                        clickedMap.getFirst().onClick();
+                        getTileMenu(clickedMap.element());
                         break;
+                    default:
+                        return;
                 }
             }
         });
     }
 
-    private Sprite[] getAllSprites() {
-        Stream s = heroes.stream();
-        return (Sprite[]) s.toArray();
+    private void getTileMenu(Sprite sp) {
+        int x = (int) sp.getRect().getCenterX();
+        int y = (int) sp.getRect().getCenterY();
+
+        //hardcoded^ offset is already contained, needs to be removed
+        ctxMenuPanel.plant(x + offsetX, y - offsetY);
+
+        repaint();
+    }
+
+    private void hideTileMenu() {
+        ctxMenuPanel.hide();
+        repaint(ctxMenuPanel.getRect());
+    }
+
+    private Stream<? extends Sprite> getAllSprites() {
+        Stream<? extends Sprite> s = heroes.stream();
+        s = Stream.concat(s, ui_sprites.stream());
+        return s;
     }
 
     @Override
@@ -105,6 +142,8 @@ public class GameRender extends JPanel {
         drawMap(g);
 
         drawHeroes(g);
+
+        drawUI(g);
     }
 
     private void drawMap(Graphics g) {
@@ -123,8 +162,13 @@ public class GameRender extends JPanel {
             heroes = getHeroes();
 
         for (HeroSprite hs : heroes) {
-            hs.draw(g, hs.hero.getX() * sizeX + sizeX / 2 - offsetX, hs.hero.getY() * sizeY + sizeY / 2 - offsetY, 0,0);
+            hs.draw(g, hs.hero.getX() * sizeX + sizeX / 2 - offsetX, hs.hero.getY() * sizeY + sizeY / 2 + offsetY, 0, 0);
         }
+    }
+
+    private void drawUI(Graphics g) {
+        for (UI_Sprite s : ui_sprites)
+            s.draw(g, offsetX, offsetY, 0, 0);
     }
 
     List<HeroSprite> getHeroes() {

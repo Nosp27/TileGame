@@ -15,7 +15,7 @@ public class LocationSprite extends Sprite{
     }
 
     @Override
-    void onClick(){
+    public void onClick(){
         System.out.println("tile "+ location.toString() + " clicked");
     }
 }

@@ -13,7 +13,7 @@ public class HeroSprite extends Sprite {
     }
 
     @Override
-    void onClick() {
+    public void onClick() {
 
     }
 }

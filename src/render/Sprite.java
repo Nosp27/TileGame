@@ -22,13 +22,7 @@ public abstract class Sprite {
 
     protected Sprite(String imagePath){
         order = 0;
-        try{
-            image = ImageIO.read(new File(imagePath));
-            rect = new Rectangle(image.getWidth(), image.getHeight());
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+        readImage(imagePath);
     }
 
     protected Sprite(String imagePath, int order){
@@ -36,7 +30,7 @@ public abstract class Sprite {
         this.order = order;
     }
 
-    void draw(Graphics g, int x, int y, int w, int h){
+    public void draw(Graphics g, int x, int y, int w, int h){
         if(w == 0)
             w = image.getWidth();
         if(h == 0)
@@ -50,7 +44,17 @@ public abstract class Sprite {
         return rect.contains(mouseCords);
     }
 
-    void onClick(){
+    public void onClick(){
 
+    }
+
+    void readImage(String path){
+        try{
+            image = ImageIO.read(new File(path));
+            rect = new Rectangle(image.getWidth(), image.getHeight());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
