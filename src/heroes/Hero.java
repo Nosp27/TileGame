@@ -10,6 +10,8 @@ import java.util.Map;
 public class Hero {
     int x,y;
     String pathName;
+    int basePower;
+    List<Buff> biffs;
 
    //accessors
     public int getX() {
