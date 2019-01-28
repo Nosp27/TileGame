@@ -1,8 +1,15 @@
 package map.locations;
 
+import heroes.Hero;
+import heroes.HeroAutomat;
+import heroes.State;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static heroes.State.FIGHT_ENGAGE;
 
 public class Location {
     static Random r = new Random();
@@ -36,6 +43,17 @@ public class Location {
         if(paths.size() == 0)
             return null;
         return paths.get(r.nextInt(paths.size()));
+    }
+
+    public void message_heroCame(Hero h){
+        switch (h.currentState()){
+            case WALKING:
+                if(ThreadLocalRandom.current().nextInt(100) < treasureFactor) //monster attacked!
+                {
+
+                }
+                break;
+        }
     }
 
     @Override

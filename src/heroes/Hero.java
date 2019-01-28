@@ -1,6 +1,7 @@
 package heroes;
 
 import map.locations.Location;
+import monsters.Monster;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
@@ -8,12 +9,24 @@ import java.util.List;
 import java.util.Map;
 
 public class Hero {
-    int x,y;
+    int x, y;
     String pathName;
-    int basePower;
-    List<Buff> biffs;
 
-   //accessors
+    int basePower;
+    float retreatBonus;
+    float dreadModifier;
+
+    private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat(this);
+
+    Location currentLocation;
+
+    List<Buff> buffs;
+
+    //accessors
+    public State currentState() {
+        return heroAutomat.getCurrentState();
+    }
+
     public int getX() {
         return x;
     }
@@ -24,6 +37,16 @@ public class Hero {
 
     public String getPathName() {
         return pathName;
+    }
+
+    public float getRetreatBonus() {
+        //TODO: add buffs
+        return retreatBonus;
+    }
+
+    public float getDreadModifier() {
+        //TODO: add buffs
+        return dreadModifier;
     }
 
     public Integer getSin(MortalSins sinType) {
@@ -73,7 +96,7 @@ public class Hero {
         return bestChoice;
     }
 
-    public int getStrength(){
+    public int getStrength() {
         //TODO: implement strength count
         throw new NotImplementedException();
     }
