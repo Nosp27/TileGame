@@ -1,6 +1,8 @@
 package heroes;
 
-import java.util.*;
+import javafx.util.Pair;
+import map.locations.EventType;
+import monsters.Monster;
 
 public class HeroAutomat {
     private State currentState;
@@ -10,7 +12,7 @@ public class HeroAutomat {
         return currentState;
     }
 
-    public void transit(State s) {
+    void transit(State s) {
         if (!currentState.next.contains(s))
             throw new IllegalArgumentException();
 
@@ -25,14 +27,5 @@ public class HeroAutomat {
         ha.currentState = State.IDLE;
         ha.controlledHero = h;
         return ha;
-    }
-
-    public void doSomething() {
-        switch (currentState) {
-            case IDLE:
-                break;
-            case WALKING:
-                controlledHero.currentLocation.message_heroCame(controlledHero);
-        }
     }
 }

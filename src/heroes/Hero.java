@@ -1,6 +1,9 @@
 package heroes;
 
+import javafx.util.Pair;
+import map.locations.EventType;
 import map.locations.Location;
+import mechanics.fight.MonsterFight;
 import monsters.Monster;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -21,6 +24,8 @@ public class Hero {
     Location currentLocation;
 
     List<Buff> buffs;
+
+    MonsterFight monsterFight;
 
     //accessors
     public State currentState() {
@@ -58,6 +63,7 @@ public class Hero {
             throw new IllegalArgumentException();
         return sins.put(sinType, value);
     }
+    //
 
     //mortal sins
     public enum MortalSins {
@@ -107,4 +113,49 @@ public class Hero {
         //TODO: implement preferences
         throw new NotImplementedException();
     }
+
+
+    //following methods affect behaviour
+    private void doSomething() {
+        Pair<EventType, Object> event;
+        switch (heroAutomat.getCurrentState()) {
+            case IDLE:
+                //TODO: idle work
+                break;
+            case WALKING:
+                //TODO: walking
+                event = currentLocation.message_heroCame(this);
+                switch (event.getKey()) {
+                    case MONSTER:
+                        startFight((Monster) event.getValue());
+                }
+                break;
+            case SEARCHING:
+                break;
+            case FIGHT_ENGAGE:
+                break;
+            case FIGHT:
+                break;
+            case RETREAT:
+                break;
+            case RETURNING:
+                break;
+        }
+    }
+
+    private void startFight(Monster monster) {
+        //TODO: startFight
+        monsterFight = new MonsterFight(this, monster, this::wound, this::collectPrize);
+    }
+
+    private void wound() {
+        //TODO: process wound
+        heroAutomat.transit(State.RETURNING);
+    }
+
+    private void collectPrize() {
+        //TODO: boost hero
+        throw new NotImplementedException();
+    }
+    //
 }

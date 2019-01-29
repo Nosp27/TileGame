@@ -3,15 +3,29 @@ package mechanics.fight;
 import heroes.Hero;
 import monsters.Monster;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MonsterFight {
     Hero hero;
     Monster monster;
+    int fightDuration;
 
-    public MonsterFight(Hero h, Monster m){
+    Runnable wound, gain;
+
+    private boolean finished;
+
+    public MonsterFight(Hero h, Monster m, Runnable wound, Runnable gain){
         hero = h;
         monster = m;
+
+        new Timer("fight timer").schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finishFight();
+            }
+        }, fightDuration);
     }
 
     //public accessors
@@ -85,5 +99,21 @@ public class MonsterFight {
         boolean isHeroStrong = Math.max(heroPower, monsterPower) == heroPower;
 
         return isHeroStrong == strongWins;
+    }
+
+    private void finishFight(){
+        if(calculateWinner()){
+            //boost up hero
+            gain.run();
+        }
+        else{
+            //wound hero
+            wound.run();
+        }
+        finished = true;
+    }
+
+    public boolean isFinished(){
+        return finished;
     }
 }
