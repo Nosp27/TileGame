@@ -1,12 +1,7 @@
 package heroes;
 
-import javafx.util.Pair;
-import map.locations.EventType;
-import monsters.Monster;
-
 public class HeroAutomat {
     private State currentState;
-    private Hero controlledHero;
 
     public State getCurrentState() {
         return currentState;
@@ -16,16 +11,24 @@ public class HeroAutomat {
         if (!currentState.next.contains(s))
             throw new IllegalArgumentException();
 
+        s.previous = currentState;
         currentState = s;
     }
+
+    void transitBack() {
+        if(currentState.previous == null)
+            throw new IllegalArgumentException();
+
+        currentState = currentState.previous;
+    }
+
 
     private HeroAutomat() {
     }
 
-    public static HeroAutomat generateAutomat(Hero h) {
+    public static HeroAutomat generateAutomat() {
         HeroAutomat ha = new HeroAutomat();
         ha.currentState = State.IDLE;
-        ha.controlledHero = h;
         return ha;
     }
 }

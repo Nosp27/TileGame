@@ -14,8 +14,13 @@ public enum State {
     RETURNING(State.IDLE, State.FIGHT, State.SEARCHING);
 
     List<State> next;
+    State previous;
 
     State(State... next) {
         this.next = new LinkedList<>(Arrays.asList(next));
+    }
+
+    public State getPrevious() {
+        return previous;
     }
 }

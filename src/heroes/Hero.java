@@ -19,7 +19,7 @@ public class Hero {
     float retreatBonus;
     float dreadModifier;
 
-    private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat(this);
+    private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat();
 
     Location currentLocation;
 
@@ -92,7 +92,7 @@ public class Hero {
     public final Location preferLocation(List<Location> variants) {
         Float bestChoiceCoeff = 0f;
         Location bestChoice = null;
-        Map<Location, Float> map = calculatePreferedLocation(variants);
+        Map<Location, Float> map = calculatePreferredLocation(variants);
         for (Location l : map.keySet()) {
             if (bestChoice == null || map.get(l) > bestChoiceCoeff) {
                 bestChoice = l;
@@ -109,7 +109,7 @@ public class Hero {
 
     //protected
     //return map for
-    protected Map<Location, Float> calculatePreferedLocation(List<Location> variants) {
+    protected Map<Location, Float> calculatePreferredLocation(List<Location> variants) {
         //TODO: implement preferences
         throw new NotImplementedException();
     }
@@ -144,8 +144,12 @@ public class Hero {
     }
 
     private void startFight(Monster monster) {
-        //TODO: startFight
+        heroAutomat.transit(State.FIGHT_ENGAGE);
         monsterFight = new MonsterFight(this, monster, this::wound, this::collectPrize);
+    }
+
+    private void retreat(){
+
     }
 
     private void wound() {
@@ -155,7 +159,7 @@ public class Hero {
 
     private void collectPrize() {
         //TODO: boost hero
-        throw new NotImplementedException();
+        heroAutomat.transitBack();
     }
     //
 }
