@@ -12,17 +12,26 @@ public class Monster {
 
     // Prizes
     List<Buff> prizeBuffs;
+
+    public List<Buff> getPrizeBuffs() {
+        return prizeBuffs;
+    }
     //
 
     // Bad impact
     List<Buff> defubbs;
+
+    public List<Buff> getDefubbs() {
+        return defubbs;
+    }
     //
+
 
     public String getType() {
         return type;
     }
 
-    public int getStrength(){
+    public int getStrength() {
         throw new NotImplementedException();
     }
 }

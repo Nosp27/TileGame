@@ -12,11 +12,12 @@ public class MonsterFight {
     Monster monster;
     int fightDuration;
 
-    Runnable wound, gain, retreat;
+    Runnable wound, gain, retreat, die;
 
     FightState state;
 
-    public MonsterFight(Hero h, Monster m, Runnable wound, Runnable gain, Runnable retreat) {
+    public MonsterFight(Hero h, Monster m, Runnable wound, Runnable gain, Runnable retreat, Runnable die) {
+        this.die = die;
         this.wound = wound;
         this.gain = gain;
         this.retreat = retreat;
@@ -108,23 +109,30 @@ public class MonsterFight {
     }
 
     private void finishFight() {
+        switch (state){
+            case PROCESS: state = FightState.END;
+                if (calculateWinner()) {
+                    //boost up hero
+                    gain.run();
+                } else {
+                    if (isFatal()) {
+                        die.run();
+                    } else {
+                        //wound hero
+                        wound.run();
+                    }
+                }
+                break;
+            case BAD_RETREAT:
+                wound.run(); break;
+            case RETREATED:
+                retreat.run(); break;
+        }
+        state = FightState.END;
+    }
 
-        if(state == FightState.PROCESS){
-            state = FightState.END;
-            if (calculateWinner()) {
-                //boost up hero
-                gain.run();
-            } else {
-                //wound hero
-                wound.run();
-            }
-        }
-        else if(state == FightState.BAD_RETREAT){
-            wound.run();
-        }
-        else if(state == FightState.RETREATED){
-            retreat.run();
-        }
+    private boolean isFatal() {
+        return ThreadLocalRandom.current().nextDouble() < (1f * getHeroPower() / (getHeroPower() + getMonsterPower()));
     }
 
     public FightState getState() {

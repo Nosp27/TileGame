@@ -3,13 +3,14 @@ package heroes;
 import javafx.util.Pair;
 import map.locations.EventType;
 import map.locations.Location;
+import mechanics.fight.FightState;
 import mechanics.fight.MonsterFight;
 import monsters.Monster;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.*;
 
 public class Hero {
     int x, y;
@@ -19,6 +20,11 @@ public class Hero {
     float retreatBonus;
     float dreadModifier;
 
+    //hero control
+    private String command;
+    private LinkedList<String> parameters;
+    //
+
     private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat();
 
     Location currentLocation;
@@ -27,7 +33,18 @@ public class Hero {
 
     MonsterFight monsterFight;
 
-    //accessors
+    //constructor
+    public Hero() {
+        sins = new HashMap<>(6);
+        parameters = new LinkedList<>();
+        buffs = new LinkedList<>();
+    }
+
+    //region accessors
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
     public State currentState() {
         return heroAutomat.getCurrentState();
     }
@@ -63,9 +80,14 @@ public class Hero {
             throw new IllegalArgumentException();
         return sins.put(sinType, value);
     }
-    //
+    //endregion
 
-    //mortal sins
+    public int getStrength() {
+        //TODO: implement strength count
+        throw new NotImplementedException();
+    }
+
+    //region mortal sins
     public enum MortalSins {
         ANGER,
         ENVY,
@@ -76,20 +98,14 @@ public class Hero {
     }
 
     private Map<MortalSins, Integer> sins;
-    //
+    //endregion
 
     //personal qualities
     //TODO: personal qualities
     //
 
-
-    //constructor
-    public Hero() {
-        sins = new HashMap<>(6);
-    }
-
     //public methods
-    public final Location preferLocation(List<Location> variants) {
+    public final Location preferLocation(Collection<Location> variants) {
         Float bestChoiceCoeff = 0f;
         Location bestChoice = null;
         Map<Location, Float> map = calculatePreferredLocation(variants);
@@ -102,16 +118,31 @@ public class Hero {
         return bestChoice;
     }
 
-    public int getStrength() {
-        //TODO: implement strength count
-        throw new NotImplementedException();
+    public void giveOrder(String order) {
+//        if(heroAutomat.getCurrentState() != State.IDLE)
+//            return;//cannot recieve orders
+
+        Scanner sc = new Scanner(order);
+        command = sc.next();
+        parameters.clear();
+        while (sc.hasNext())
+            parameters.add(sc.next());
+
+        //execute
+        //TODO: calculate route, walk the way (main line)
     }
 
     //protected
     //return map for
-    protected Map<Location, Float> calculatePreferredLocation(List<Location> variants) {
-        //TODO: implement preferences
-        throw new NotImplementedException();
+    protected Map<Location, Float> calculatePreferredLocation(Collection<Location> variants) {
+        HashMap<Location, Float> map = new HashMap<>();
+        for(Location l : variants){
+            float preferIndex = 0;
+            preferIndex += getSin(MortalSins.ANGER) * l.getMonsterFactor();
+            preferIndex += (getSin(MortalSins.AVARICE) + getSin(MortalSins.ENVY)) * l.getTreasureFactor() / 2;
+            map.put(l, preferIndex);
+        }
+        return map;
     }
 
 
@@ -127,17 +158,18 @@ public class Hero {
                 event = currentLocation.message_heroCame(this);
                 switch (event.getKey()) {
                     case MONSTER:
+                        heroAutomat.transit(State.FIGHT);
                         startFight((Monster) event.getValue());
+                    case TREASURE:
+                        heroAutomat.transit(State.SEARCHING);
+                        //TODO:grab item
                 }
                 break;
             case SEARCHING:
                 break;
-            case FIGHT_ENGAGE:
-                break;
             case FIGHT:
-                break;
-            case RETREAT:
-                break;
+                return;
+
             case RETURNING:
                 break;
         }
@@ -145,11 +177,16 @@ public class Hero {
 
     private void startFight(Monster monster) {
         heroAutomat.transit(State.FIGHT_ENGAGE);
-        monsterFight = new MonsterFight(this, monster, this::wound, this::collectPrize);
+        monsterFight = new MonsterFight(this, monster, this::wound, this::collectPrize, this::retreat, this::die);
     }
 
-    private void retreat(){
-
+    private void retreat() {
+        //TODO: retreat reaction
+        if (monsterFight.getState() == FightState.BAD_RETREAT) {
+            //wounded
+        } else {
+            //successful
+        }
     }
 
     private void wound() {
@@ -157,8 +194,16 @@ public class Hero {
         heroAutomat.transit(State.RETURNING);
     }
 
+    private void die() {
+        //TODO: hero death
+    }
+
     private void collectPrize() {
         //TODO: boost hero
+        for (Buff b : monsterFight.getMonster().getPrizeBuffs()) {
+            if (!buffs.contains(b))
+                buffs.add(b);
+        }
         heroAutomat.transitBack();
     }
     //

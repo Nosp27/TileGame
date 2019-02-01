@@ -2,13 +2,13 @@ package map;
 
 import heroes.Hero;
 import heroes.HeroFactory;
+import javafx.util.Pair;
 import map.locations.Location;
 import map.locations.LocationFabric;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MapGenerator {
     int size;
@@ -51,7 +51,55 @@ public class MapGenerator {
     }
 
     public Stack<Location> calculateRoute(Hero hero) {
-        //TODO: route calculation
-        throw new NotImplementedException();
+        Stack<Location> route = new Stack<>();
+
+        int startX = hero.getX();
+        int startY = hero.getY();
+        int targetX = ThreadLocalRandom.current().nextInt(size);
+        int targetY = ThreadLocalRandom.current().nextInt(size);
+
+        int _x = startX;
+        int _y = startY;
+        Location prev = null;
+
+        int minX = Math.min(startX, targetX);
+        int minY = Math.min(startY, targetY);
+
+        int maxX = Math.max(startX, targetX);
+        int maxY = Math.max(startY, targetY);
+
+        while(_x != targetX || _y != targetY){
+            Map<Location, Pair<Integer, Integer>> variants = getNearby(_x, _y);
+            if(prev != null)
+                variants.remove(prev);
+
+            if(_x < minX)
+                variants.remove(map[_y][_x-1]);
+            if(_x > maxX)
+                variants.remove(map[_y][_x+1]);
+            if(_y < minY)
+                variants.remove(map[_y-1][_x]);
+            if(_y > maxY)
+                variants.remove(map[_y+1][_x]);
+
+            prev = map[_x][_y];
+            Location desirable = hero.preferLocation(variants.keySet());
+            Pair<Integer, Integer> _coords = variants.get(desirable);
+            _y = _coords.getKey();
+            _x = _coords.getValue();
+
+            route.push(desirable);
+        }
+        return route;
+    }
+
+    private Map<Location, Pair<Integer, Integer>> getNearby(int x, int y){
+        HashMap<Location, Pair<Integer, Integer>> result = new HashMap<>();
+        result.put(map[y][x-1], new Pair<>(y,x-1));
+        result.put(map[y][x+1], new Pair<>(y,x+1));
+        result.put(map[y-1][x], new Pair<>(y-1,x));
+        result.put(map[y+1][x], new Pair<>(y+1,x));
+
+        return result;
     }
 }

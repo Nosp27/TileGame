@@ -8,9 +8,6 @@ public class HeroAutomat {
     }
 
     void transit(State s) {
-        if (!currentState.next.contains(s))
-            throw new IllegalArgumentException();
-
         s.previous = currentState;
         currentState = s;
     }
