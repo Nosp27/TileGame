@@ -1,13 +1,15 @@
 package heroes;
 
+import map.MapGenerator;
+
 import java.util.NoSuchElementException;
 
 public class HeroFactory {
     static final String directory = "res/heroes/";
 
-    public static Hero sorcerer() {
+    public static Hero sorcerer(MapGenerator mg) {
         //TODO: sorcerer
-        Hero h = getCustomHero();
+        Hero h = getCustomHero(mg);
         h.pathName = "sorcer";
         h.pathName = getPath(h);
         return h;
@@ -18,8 +20,8 @@ public class HeroFactory {
         h.y = cords[1];
     }
 
-    private static Hero getCustomHero() {
-        Hero h = new Hero();
+    private static Hero getCustomHero(MapGenerator mg) {
+        Hero h = new Hero(mg);
         h.pathName = "hero";
         h.pathName = getPath(h);
         return h;

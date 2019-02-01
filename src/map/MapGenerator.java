@@ -32,14 +32,14 @@ public class MapGenerator {
                     map[i][j] = LocationFabric.getRandomLocation();
                 }
             }
-        addHero();
     }
 
-    void addHero() {
+    public Hero addHero() {
         int towerCoord = size / 2;
-        Hero sorcer = HeroFactory.sorcerer();
+        Hero sorcer = HeroFactory.sorcerer(this);
         HeroFactory.place(sorcer, new int[]{towerCoord, towerCoord});
         heroes.add(sorcer);
+        return sorcer;
     }
 
     public Location[][] getMap() {
@@ -62,24 +62,18 @@ public class MapGenerator {
         int _y = startY;
         Location prev = null;
 
-        int minX = Math.min(startX, targetX);
-        int minY = Math.min(startY, targetY);
-
-        int maxX = Math.max(startX, targetX);
-        int maxY = Math.max(startY, targetY);
-
         while(_x != targetX || _y != targetY){
             Map<Location, Pair<Integer, Integer>> variants = getNearby(_x, _y);
             if(prev != null)
                 variants.remove(prev);
 
-            if(_x < minX)
+            if(_x <= targetX)
                 variants.remove(map[_y][_x-1]);
-            if(_x > maxX)
+            if(_x >= targetX)
                 variants.remove(map[_y][_x+1]);
-            if(_y < minY)
+            if(_y <= targetY)
                 variants.remove(map[_y-1][_x]);
-            if(_y > maxY)
+            if(_y >= targetY)
                 variants.remove(map[_y+1][_x]);
 
             prev = map[_x][_y];
@@ -95,10 +89,10 @@ public class MapGenerator {
 
     private Map<Location, Pair<Integer, Integer>> getNearby(int x, int y){
         HashMap<Location, Pair<Integer, Integer>> result = new HashMap<>();
-        result.put(map[y][x-1], new Pair<>(y,x-1));
-        result.put(map[y][x+1], new Pair<>(y,x+1));
-        result.put(map[y-1][x], new Pair<>(y-1,x));
-        result.put(map[y+1][x], new Pair<>(y+1,x));
+        try{result.put(map[y][x-1], new Pair<>(y,x-1)); } catch(IndexOutOfBoundsException ignore){}
+        try{result.put(map[y][x+1], new Pair<>(y,x+1));}catch(IndexOutOfBoundsException ignore){}
+        try{result.put(map[y-1][x], new Pair<>(y-1,x));}catch(IndexOutOfBoundsException ignore){}
+        try{result.put(map[y+1][x], new Pair<>(y+1,x));}catch(IndexOutOfBoundsException ignore){}
 
         return result;
     }

@@ -1,8 +1,11 @@
 package render;
 import map.MapGenerator;
+import map.locations.Location;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Stack;
 
 public class GameFrame extends JFrame {
     GameRender mainPanel;

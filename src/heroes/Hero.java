@@ -1,6 +1,7 @@
 package heroes;
 
 import javafx.util.Pair;
+import map.MapGenerator;
 import map.locations.EventType;
 import map.locations.Location;
 import mechanics.fight.FightState;
@@ -8,13 +9,16 @@ import mechanics.fight.MonsterFight;
 import monsters.Monster;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.InputStream;
-import java.io.StringReader;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Hero {
     int x, y;
     String pathName;
+
+    private MapGenerator mg;
 
     int basePower;
     float retreatBonus;
@@ -23,6 +27,7 @@ public class Hero {
     //hero control
     private String command;
     private LinkedList<String> parameters;
+    Stack<Location> route;
     //
 
     private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat();
@@ -34,7 +39,8 @@ public class Hero {
     MonsterFight monsterFight;
 
     //constructor
-    public Hero() {
+    public Hero(MapGenerator mg) {
+        this.mg = mg;
         sins = new HashMap<>(6);
         parameters = new LinkedList<>();
         buffs = new LinkedList<>();
@@ -130,6 +136,7 @@ public class Hero {
 
         //execute
         //TODO: calculate route, walk the way (main line)
+        route = mg.calculateRoute(this);
     }
 
     //protected
@@ -139,7 +146,7 @@ public class Hero {
         for(Location l : variants){
             float preferIndex = 0;
             preferIndex += getSin(MortalSins.ANGER) * l.getMonsterFactor();
-            preferIndex += (getSin(MortalSins.AVARICE) + getSin(MortalSins.ENVY)) * l.getTreasureFactor() / 2;
+            preferIndex += (getSin(MortalSins.AVARICE) + getSin(MortalSins.ENVY)) * l.getTreasureFactor() / 2f;
             map.put(l, preferIndex);
         }
         return map;
