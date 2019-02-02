@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MonsterFight {
     Hero hero;
     Monster monster;
-    int fightDuration;
+    int fightDuration = 1200;
 
     Runnable wound, gain, retreat, die;
 
@@ -22,13 +22,17 @@ public class MonsterFight {
         this.gain = gain;
         this.retreat = retreat;
 
+        state = FightState.BEGIN;
+
+        System.out.println("met " + m.getType());
         hero = h;
         monster = m;
         if (wantsToRetreat()) {
+            System.out.println("want retreat");
             processRetreat();
+            System.out.println("tried retreat, state: " + state);
         }
 
-        if (state == FightState.PROCESS)
             new Timer("fight timer").schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -109,12 +113,15 @@ public class MonsterFight {
     }
 
     private void finishFight() {
+        System.out.println("ff with state " + state.name());
         switch (state){
             case PROCESS: state = FightState.END;
                 if (calculateWinner()) {
                     //boost up hero
+                    System.out.println("hero win");
                     gain.run();
                 } else {
+                    System.out.println("hero lose");
                     if (isFatal()) {
                         die.run();
                     } else {

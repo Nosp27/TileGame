@@ -7,14 +7,12 @@ import map.locations.Location;
 import mechanics.fight.FightState;
 import mechanics.fight.MonsterFight;
 import monsters.Monster;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
-public class Hero {
+public class Hero extends Thread {
     int x, y;
     String pathName;
 
@@ -25,18 +23,21 @@ public class Hero {
     float dreadModifier;
 
     //hero control
-    private String command;
-    private LinkedList<String> parameters;
-    Stack<Location> route;
+    private volatile boolean gotNewOrder;
+    private volatile String command;
+    private volatile LinkedList<String> parameters;
+    Stack<Integer[]> route;
     //
 
     private final HeroAutomat heroAutomat = HeroAutomat.generateAutomat();
 
-    Location currentLocation;
-
     List<Buff> buffs;
 
     MonsterFight monsterFight;
+
+    //render
+    private Runnable walkCallback;
+    //
 
     //constructor
     public Hero(MapGenerator mg) {
@@ -46,12 +47,16 @@ public class Hero {
         buffs = new LinkedList<>();
     }
 
-    //region accessors
-    public Location getCurrentLocation() {
-        return currentLocation;
+    public void setWalkCallback(Runnable walkCallback) {
+        this.walkCallback = walkCallback;
     }
 
-    public State currentState() {
+    //region accessors
+    public Location getCurrentLocation() {
+        return mg.getMap()[y][x];
+    }
+
+    public HeroState currentState() {
         return heroAutomat.getCurrentState();
     }
 
@@ -86,11 +91,35 @@ public class Hero {
             throw new IllegalArgumentException();
         return sins.put(sinType, value);
     }
+
+    public String getMission() {
+        return command;
+    }
     //endregion
 
+    public void run() {
+        try {
+            synchronized (this){
+                while (true) {
+                    doSomething();
+                    sleep(400);
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public int getStrength() {
-        //TODO: implement strength count
-        throw new NotImplementedException();
+        if (monsterFight == null) {
+            return basePower;
+        }
+
+        int finalStrength = basePower;
+        for (Buff b : buffs) {
+            finalStrength += b.powerBuff(monsterFight);
+        }
+        return finalStrength;
     }
 
     //region mortal sins
@@ -111,94 +140,129 @@ public class Hero {
     //
 
     //public methods
-    public final Location preferLocation(Collection<Location> variants) {
+    public final Integer[] preferLocation(Stream<Pair<Location, Integer[]>> variants) {
         Float bestChoiceCoeff = 0f;
-        Location bestChoice = null;
-        Map<Location, Float> map = calculatePreferredLocation(variants);
-        for (Location l : map.keySet()) {
-            if (bestChoice == null || map.get(l) > bestChoiceCoeff) {
-                bestChoice = l;
-                bestChoiceCoeff = map.get(l);
+        Integer[] bestChoice = null;
+        Map<Integer[], Float> map = calculatePreferredLocation(variants);
+        for (Integer[] cords : map.keySet()) {
+            if (bestChoice == null || map.get(cords) > bestChoiceCoeff) {
+                bestChoice = cords;
+                bestChoiceCoeff = map.get(cords);
             }
         }
         return bestChoice;
     }
 
     public void giveOrder(String order) {
-//        if(heroAutomat.getCurrentState() != State.IDLE)
-//            return;//cannot recieve orders
+        synchronized (this){
+            Scanner sc = new Scanner(order);
+            command = sc.next();
+            parameters.clear();
+            while (sc.hasNext())
+                parameters.add(sc.next());
+            gotNewOrder = true;
+        }
+    }
 
-        Scanner sc = new Scanner(order);
-        command = sc.next();
-        parameters.clear();
-        while (sc.hasNext())
-            parameters.add(sc.next());
-
+    private void executeOrder(){
         //execute
-        //TODO: calculate route, walk the way (main line)
         route = mg.calculateRoute(this);
+
+        if (command.equals("seek")) {
+            heroAutomat.transit(HeroState.WALKING);
+        }
     }
 
     //protected
     //return map for
-    protected Map<Location, Float> calculatePreferredLocation(Collection<Location> variants) {
-        HashMap<Location, Float> map = new HashMap<>();
-        for(Location l : variants){
+    protected Map<Integer[], Float> calculatePreferredLocation(Stream<Pair<Location, Integer[]>> variants) {
+        ConcurrentHashMap<Integer[], Float> map = new ConcurrentHashMap<>();
+        Iterator<Pair<Location, Integer[]>> it = variants.iterator();
+        while (it.hasNext()) {
+            Pair<Location, Integer[]> pair = it.next();
+            Location l = pair.getKey();
             float preferIndex = 0;
             preferIndex += getSin(MortalSins.ANGER) * l.getMonsterFactor();
             preferIndex += (getSin(MortalSins.AVARICE) + getSin(MortalSins.ENVY)) * l.getTreasureFactor() / 2f;
-            map.put(l, preferIndex);
+            map.put(pair.getValue(), preferIndex);
         }
         return map;
     }
 
-
     //following methods affect behaviour
     private void doSomething() {
+        if(gotNewOrder){
+            executeOrder();
+            gotNewOrder = false;
+        }
+
         Pair<EventType, Object> event;
         switch (heroAutomat.getCurrentState()) {
             case IDLE:
                 //TODO: idle work
+                System.out.println("idle");
                 break;
             case WALKING:
-                //TODO: walking
-                event = currentLocation.message_heroCame(this);
+                System.out.println("walk");
+                followRoute();
+
+                event = getCurrentLocation().message_heroCame(this);
                 switch (event.getKey()) {
                     case MONSTER:
-                        heroAutomat.transit(State.FIGHT);
                         startFight((Monster) event.getValue());
+                        break;
                     case TREASURE:
-                        heroAutomat.transit(State.SEARCHING);
+                        heroAutomat.transit(HeroState.SEARCHING);
                         //TODO:grab item
+                        break;
+                    case NONE:
+                        break;
                 }
                 break;
             case SEARCHING:
+                System.out.println("searching");
+                heroAutomat.transitBack();
                 break;
             case FIGHT:
+                System.out.println("fight");
                 return;
 
             case RETURNING:
+                System.out.println("returning");
+                followRoute();
                 break;
         }
     }
 
+    private void followRoute() {
+        if (route.empty()) {
+            heroAutomat.transit(HeroState.IDLE);
+            return;
+        }
+        System.out.println("walk to " + route.peek()[1] + " " + route.peek()[0]);
+        Integer[] preferred = route.pop();
+        y = preferred[0];
+        x = preferred[1];
+
+        if (walkCallback != null)
+            walkCallback.run();
+    }
+
     private void startFight(Monster monster) {
-        heroAutomat.transit(State.FIGHT_ENGAGE);
+        heroAutomat.transit(HeroState.FIGHT);
         monsterFight = new MonsterFight(this, monster, this::wound, this::collectPrize, this::retreat, this::die);
     }
 
     private void retreat() {
         //TODO: retreat reaction
-        if (monsterFight.getState() == FightState.BAD_RETREAT) {
-            //wounded
-        } else {
-            //successful
-        }
+        heroAutomat.transitBack();
     }
 
     private void wound() {
         //TODO: process wound
-        heroAutomat.transit(State.RETURNING);
+        heroAutomat.transit(HeroState.RETURNING);
+        giveOrder("return");
+        route = mg.calculateRoute(this);
     }
 
     private void die() {

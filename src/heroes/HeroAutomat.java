@@ -1,13 +1,13 @@
 package heroes;
 
 public class HeroAutomat {
-    private State currentState;
+    private HeroState currentState;
 
-    public State getCurrentState() {
+    public HeroState getCurrentState() {
         return currentState;
     }
 
-    void transit(State s) {
+    void transit(HeroState s) {
         s.previous = currentState;
         currentState = s;
     }
@@ -25,7 +25,7 @@ public class HeroAutomat {
 
     public static HeroAutomat generateAutomat() {
         HeroAutomat ha = new HeroAutomat();
-        ha.currentState = State.IDLE;
+        ha.currentState = HeroState.IDLE;
         return ha;
     }
 }

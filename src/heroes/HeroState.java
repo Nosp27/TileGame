@@ -1,10 +1,8 @@
 package heroes;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-public enum State {
+public enum HeroState {
     IDLE,
     WALKING,
     SEARCHING,
@@ -13,10 +11,10 @@ public enum State {
     RETREAT,
     RETURNING;
 
-    List<State> next;
-    State previous;
+    List<HeroState> next;
+    HeroState previous;
 
-    public State getPrevious() {
+    public HeroState getPrevious() {
         return previous;
     }
 }

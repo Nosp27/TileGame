@@ -18,12 +18,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 public class GameRender extends JPanel {
     static Random r = new Random();
 
-    int sizeX = 120, sizeY = 120;
+    int sizeX = 100, sizeY = 100;
     int offsetX = 0;
     int offsetY = 0;
 
@@ -147,12 +151,25 @@ public class GameRender extends JPanel {
     }
 
     private void drawMap(Graphics g) {
+        ExecutorService es = Executors.newCachedThreadPool();
+        ExecutorCompletionService<Boolean> ecs = new ExecutorCompletionService<>(es);
+
         if (map == null)
             map = getMap();
 
         for (int i = 0; i < map.length; ++i) {
             for (int j = 0; j < map[i].length; ++j) {
-                map[i][j].draw(g, j * sizeX - offsetX, i * sizeY + offsetY, sizeX, sizeY);
+                final int ii = i;
+                final int jj = j;
+                final LocationSprite ls = map[i][j];
+                ecs.submit(() -> {ls.draw(g, jj * sizeX - offsetX, ii * sizeY + offsetY, sizeX, sizeY); return true;});
+            }
+        }
+        for(int i = 0; i < map.length * map.length; i++){
+            try {
+                ecs.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

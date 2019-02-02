@@ -6,8 +6,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 public class Monster {
-    //TODO: implement monster
+    Monster(){}
 
+    int strength;
     String type;
 
     // Prizes
@@ -32,6 +33,6 @@ public class Monster {
     }
 
     public int getStrength() {
-        throw new NotImplementedException();
+        return strength;
     }
 }

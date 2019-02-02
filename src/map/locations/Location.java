@@ -39,6 +39,7 @@ public class Location {
     Location(String pathName) {
         this.pathName = pathName;
         paths = new LinkedList<>();
+        monsters = new LinkedList<>();
     }
 
     public String getRandomTile(){
@@ -51,11 +52,11 @@ public class Location {
     public Pair<EventType, Object> message_heroCame(Hero h){
         switch (h.currentState()){
             case WALKING:
-                if(check(monsterFactor)) //monster attacked!
+                if(check(monsterFactor) && monsters.size() > 0) //monster attacked!
                     return new Pair<>(EventType.MONSTER, getRandomMonster());
-                else if(check(treasureFactor))
+                else if(check(treasureFactor) && false)//dummy
                     return new Pair<>(EventType.TREASURE, null);//TODO: finish treasures
-                else if(check(encounterFactor))
+                else if(check(encounterFactor) && false)//dummy
                     return new Pair<>(EventType.ENCOUNTER, null);//TODO: finish encounters
                 else return new Pair<>(EventType.NONE, null);
         }
@@ -63,6 +64,9 @@ public class Location {
     }
 
     private Monster getRandomMonster() {
+        if(monsters.size() == 0)
+            return null;
+
         return monsters.get(ThreadLocalRandom.current().nextInt(monsters.size()));
     }
 

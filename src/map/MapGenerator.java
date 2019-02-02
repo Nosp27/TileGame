@@ -7,8 +7,12 @@ import map.locations.Location;
 import map.locations.LocationFabric;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class MapGenerator {
     int size;
@@ -50,50 +54,75 @@ public class MapGenerator {
         return heroes;
     }
 
-    public Stack<Location> calculateRoute(Hero hero) {
-        Stack<Location> route = new Stack<>();
+    public Stack<Integer[]> calculateRoute(Hero hero) {
+        System.out.println("calculating route");
+        synchronized (hero){
+            System.out.println("calculating route2");
+            Stack<Integer[]> route = new Stack<>();
 
-        int startX = hero.getX();
-        int startY = hero.getY();
-        int targetX = ThreadLocalRandom.current().nextInt(size);
-        int targetY = ThreadLocalRandom.current().nextInt(size);
+            int startX = hero.getX();
+            int startY = hero.getY();
+            int targetX;
+            int targetY;
 
-        int _x = startX;
-        int _y = startY;
-        Location prev = null;
+            int towerCoord = size / 2;
+            switch (hero.getMission()) {
+                case "seek":
+                    targetX = ThreadLocalRandom.current().nextInt(size);
+                    targetY = ThreadLocalRandom.current().nextInt(size);
+                    break;
+                case "return":
+                    targetX = towerCoord;
+                    targetY = towerCoord;
+                    break;
+                default:
+                    targetX = 0;
+                    targetY = 0;
+            }
 
-        while(_x != targetX || _y != targetY){
-            Map<Location, Pair<Integer, Integer>> variants = getNearby(_x, _y);
-            if(prev != null)
-                variants.remove(prev);
+            int _x = startX;
+            int _y = startY;
 
-            if(_x <= targetX)
-                variants.remove(map[_y][_x-1]);
-            if(_x >= targetX)
-                variants.remove(map[_y][_x+1]);
-            if(_y <= targetY)
-                variants.remove(map[_y-1][_x]);
-            if(_y >= targetY)
-                variants.remove(map[_y+1][_x]);
+            while (_x != targetX || _y != targetY) {
+                List<Point> variants = getNearby(_x, _y);
 
-            prev = map[_x][_y];
-            Location desirable = hero.preferLocation(variants.keySet());
-            Pair<Integer, Integer> _coords = variants.get(desirable);
-            _y = _coords.getKey();
-            _x = _coords.getValue();
+                if (_x <= targetX)
+                    variants.remove(new Point(_x - 1, _y));
+                if (_x >= targetX)
+                    variants.remove(new Point(_x + 1, _y));
+                if (_y <= targetY)
+                    variants.remove(new Point(_x, _y - 1));
+                if (_y >= targetY)
+                    variants.remove(new Point(_x, _y + 1));
 
-            route.push(desirable);
+                Stream<Pair<Location, Integer[]>> locations = variants.stream().map(p -> new Pair<>(map[p.y][p.x], new Integer[]{p.y, p.x}));
+                Integer[] _coords = hero.preferLocation(locations);
+                _y = _coords[0];
+                _x = _coords[1];
+
+                route.push(new Integer[]{_y, _x});
+            }
+            Stack<Integer[]> newRoute = new Stack<>();
+            while (!route.empty())
+                newRoute.push(route.pop());
+
+            return newRoute;
         }
-        return route;
     }
 
-    private Map<Location, Pair<Integer, Integer>> getNearby(int x, int y){
-        HashMap<Location, Pair<Integer, Integer>> result = new HashMap<>();
-        try{result.put(map[y][x-1], new Pair<>(y,x-1)); } catch(IndexOutOfBoundsException ignore){}
-        try{result.put(map[y][x+1], new Pair<>(y,x+1));}catch(IndexOutOfBoundsException ignore){}
-        try{result.put(map[y-1][x], new Pair<>(y-1,x));}catch(IndexOutOfBoundsException ignore){}
-        try{result.put(map[y+1][x], new Pair<>(y+1,x));}catch(IndexOutOfBoundsException ignore){}
-
+    private List<Point> getNearby(int x, int y) {
+        List<Point> result = new LinkedList<>();
+        result.add(new Point(x, y - 1));
+        result.add(new Point(x, y + 1));
+        result.add(new Point(x - 1, y));
+        result.add(new Point(x + 1, y));
+        result.removeIf(c -> !cellExists(c.x, c.y));
         return result;
+    }
+
+    private boolean cellExists(Integer x, Integer y) {
+        if (x >= size || x < 0) return false;
+        if (y >= size || y < 0) return false;
+        return true;
     }
 }
