@@ -55,7 +55,7 @@ public class MapGenerator {
     }
 
     public Stack<Integer[]> calculateRoute(Hero hero) {
-        System.out.println("calculating route");
+        System.out.println("calculating route (" + Thread.currentThread() + ")");
         synchronized (hero){
             System.out.println("calculating route2");
             Stack<Integer[]> route = new Stack<>();

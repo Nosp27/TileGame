@@ -59,8 +59,8 @@ public class Location {
                 else if(check(encounterFactor) && false)//dummy
                     return new Pair<>(EventType.ENCOUNTER, null);//TODO: finish encounters
                 else return new Pair<>(EventType.NONE, null);
+                default: return new Pair<>(EventType.NONE, null);
         }
-        return null;
     }
 
     private Monster getRandomMonster() {

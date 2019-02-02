@@ -16,6 +16,8 @@ public class MonsterFight {
 
     FightState state;
 
+    Timer fightTimer;
+
     public MonsterFight(Hero h, Monster m, Runnable wound, Runnable gain, Runnable retreat, Runnable die) {
         this.die = die;
         this.wound = wound;
@@ -33,12 +35,15 @@ public class MonsterFight {
             System.out.println("tried retreat, state: " + state);
         }
 
-            new Timer("fight timer").schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    finishFight();
-                }
-            }, fightDuration);
+        if(state == FightState.BEGIN)
+            state = FightState.PROCESS;
+        fightTimer = new Timer("fight timer");
+        fightTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finishFight();
+            }
+        }, fightDuration);
     }
 
     //public accessors
@@ -114,8 +119,9 @@ public class MonsterFight {
 
     private void finishFight() {
         System.out.println("ff with state " + state.name());
-        switch (state){
-            case PROCESS: state = FightState.END;
+        switch (state) {
+            case PROCESS:
+                state = FightState.END;
                 if (calculateWinner()) {
                     //boost up hero
                     System.out.println("hero win");
@@ -131,11 +137,14 @@ public class MonsterFight {
                 }
                 break;
             case BAD_RETREAT:
-                wound.run(); break;
+                wound.run();
+                break;
             case RETREATED:
-                retreat.run(); break;
+                retreat.run();
+                break;
         }
         state = FightState.END;
+        fightTimer.cancel();
     }
 
     private boolean isFatal() {

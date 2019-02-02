@@ -99,10 +99,12 @@ public class Hero extends Thread {
 
     public void run() {
         try {
-            synchronized (this){
+            synchronized (this) {
                 while (true) {
                     doSomething();
                     sleep(400);
+                    notifyAll();
+                    wait(10);
                 }
             }
         } catch (InterruptedException e) {
@@ -154,22 +156,31 @@ public class Hero extends Thread {
     }
 
     public void giveOrder(String order) {
-        synchronized (this){
-            Scanner sc = new Scanner(order);
-            command = sc.next();
-            parameters.clear();
-            while (sc.hasNext())
-                parameters.add(sc.next());
-            gotNewOrder = true;
-        }
+
+        if(heroAutomat.getCurrentState() != HeroState.IDLE)
+            return;
+
+        giveOrderInternal(order);
     }
 
-    private void executeOrder(){
+    private void giveOrderInternal(String order) {
+        System.out.println("order: " + order);
+        Scanner sc = new Scanner(order);
+        command = sc.next();
+        parameters.clear();
+        while (sc.hasNext())
+            parameters.add(sc.next());
+        gotNewOrder = true;
+    }
+
+    private void executeOrder() {
+        System.out.println("execute: " + command);
         //execute
         route = mg.calculateRoute(this);
 
-        if (command.equals("seek")) {
-            heroAutomat.transit(HeroState.WALKING);
+        switch (command) {
+            case "seek": heroAutomat.transit(HeroState.WALKING); break;
+            case "return": heroAutomat.transit(HeroState.RETURNING);break;
         }
     }
 
@@ -191,7 +202,7 @@ public class Hero extends Thread {
 
     //following methods affect behaviour
     private void doSomething() {
-        if(gotNewOrder){
+        if (gotNewOrder) {
             executeOrder();
             gotNewOrder = false;
         }
@@ -200,7 +211,6 @@ public class Hero extends Thread {
         switch (heroAutomat.getCurrentState()) {
             case IDLE:
                 //TODO: idle work
-                System.out.println("idle");
                 break;
             case WALKING:
                 System.out.println("walk");
@@ -236,13 +246,15 @@ public class Hero extends Thread {
 
     private void followRoute() {
         if (route.empty()) {
+            System.out.println("idle");
             heroAutomat.transit(HeroState.IDLE);
             return;
         }
-        System.out.println("walk to " + route.peek()[1] + " " + route.peek()[0]);
+
         Integer[] preferred = route.pop();
         y = preferred[0];
         x = preferred[1];
+        System.out.println("go to " + y + " " + x);
 
         if (walkCallback != null)
             walkCallback.run();
@@ -260,9 +272,7 @@ public class Hero extends Thread {
 
     private void wound() {
         //TODO: process wound
-        heroAutomat.transit(HeroState.RETURNING);
-        giveOrder("return");
-        route = mg.calculateRoute(this);
+        giveOrderInternal("return");
     }
 
     private void die() {
