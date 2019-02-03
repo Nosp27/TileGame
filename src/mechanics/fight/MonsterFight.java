@@ -90,13 +90,10 @@ public class MonsterFight {
 
         float random = ThreadLocalRandom.current().nextFloat();
         if (random < successChance) {
-            //TODO: success
             state = FightState.RETREATED;
         } else if (random < successChance + woundChance) {
-            //TODO: wounded retreat
             state = FightState.BAD_RETREAT;
         } else {
-            //TODO: fight
             state = FightState.PROCESS;
         }
     }

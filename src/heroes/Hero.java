@@ -210,7 +210,6 @@ public class Hero extends Thread {
         Pair<EventType, Object> event;
         switch (heroAutomat.getCurrentState()) {
             case IDLE:
-                //TODO: idle work
                 break;
             case WALKING:
                 System.out.println("walk");
@@ -266,7 +265,6 @@ public class Hero extends Thread {
     }
 
     private void retreat() {
-        //TODO: retreat reaction
         heroAutomat.transitBack();
     }
 
@@ -280,7 +278,6 @@ public class Hero extends Thread {
     }
 
     private void collectPrize() {
-        //TODO: boost hero
         for (Buff b : monsterFight.getMonster().getPrizeBuffs()) {
             if (!buffs.contains(b))
                 buffs.add(b);

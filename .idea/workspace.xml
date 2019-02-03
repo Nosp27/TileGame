@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7779603-bf74-4519-9796-405a4c82de1c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/res/possible_bugs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/heroes/Hero.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/heroes/Hero.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/heroes/HeroFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/heroes/HeroFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/map/MapGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/map/MapGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/map/locations/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/map/locations/Location.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monsters/Monster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/monsters/Monster.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,32 +56,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Hero.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Hero.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/heroes/Hero.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="273" column="29" selection-start-line="273" selection-start-column="29" selection-end-line="273" selection-end-column="29" />
+            <state relative-caret-position="180">
+              <caret line="211" column="22" selection-start-line="211" selection-start-column="22" selection-end-line="211" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#875#1061#0" />
-                <element signature="e#1535#1628#0" />
-                <element signature="e#1634#1729#0" />
                 <element signature="e#1836#2029#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="possible_bugs.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/possible_bugs.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="37" selection-start-column="37" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HeroFactory.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HeroFactory.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/heroes/HeroFactory.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="224">
@@ -102,11 +85,45 @@
       <file leaf-file-name="MonsterFight.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="134" column="27" selection-start-line="134" selection-start-column="27" selection-end-line="134" selection-end-column="27" />
+            <state relative-caret-position="308">
+              <caret line="96" column="39" lean-forward="true" selection-start-line="96" selection-start-column="39" selection-end-line="96" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#calculateWinner#0;class#MonsterFight#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UI_Button.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/render/UI/UI_Button.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="196">
+              <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Location.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/map/locations/Location.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="59" column="67" selection-start-line="59" selection-start-column="67" selection-end-line="59" selection-end-column="67" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BuffFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/heroes/BuffFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#523#524#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -166,13 +183,13 @@
         <option value="$PROJECT_DIR$/src/render/GameFrame.java" />
         <option value="$PROJECT_DIR$/src/render/GameRender.java" />
         <option value="$PROJECT_DIR$/src/map/MapGenerator.java" />
-        <option value="$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java" />
         <option value="$PROJECT_DIR$/src/monsters/Monster.java" />
         <option value="$PROJECT_DIR$/src/map/locations/Location.java" />
         <option value="$PROJECT_DIR$/src/GameController.java" />
-        <option value="$PROJECT_DIR$/src/heroes/Hero.java" />
         <option value="$PROJECT_DIR$/res/possible_bugs.txt" />
         <option value="$PROJECT_DIR$/src/heroes/HeroFactory.java" />
+        <option value="$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java" />
+        <option value="$PROJECT_DIR$/src/heroes/Hero.java" />
       </list>
     </option>
   </component>
@@ -198,7 +215,6 @@
     </navigator>
     <panes>
       <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -226,6 +242,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -337,12 +354,13 @@
       <workItem from="1549020926849" duration="2629000" />
       <workItem from="1549101464604" duration="16140000" />
       <workItem from="1549119071400" duration="1732000" />
-      <workItem from="1549138455136" duration="3203000" />
+      <workItem from="1549138455136" duration="3426000" />
+      <workItem from="1549179430607" duration="261000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96578000" />
+    <option name="totallyTimeSpent" value="97062000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -358,35 +376,35 @@
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3295082" />
       <window_info anchor="bottom" id="Tool Output" order="8" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4984375" weight="0.22198732" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info id="Image Layers" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.51875" side_tool="true" visible="true" weight="0.32875264" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50104165" side_tool="true" visible="true" weight="0.32875264" />
       <window_info anchor="right" id="Maven Projects" order="5" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="12" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.48125" visible="true" weight="0.32875264" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26822916" />
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="bottom" id="ANTLR Preview" order="13" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4859375" weight="0.39323467" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" sideWeight="0.49895832" visible="true" weight="0.32875264" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4984375" weight="0.22198732" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="Image Layers" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="bottom" id="Version Control" order="12" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.48072916" weight="0.32875264" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26822916" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947917" weight="0.32875264" />
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4859375" weight="0.39323467" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947917" weight="0.32875264" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -496,8 +514,6 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#875#1061#0" />
-            <element signature="e#1535#1628#0" />
-            <element signature="e#1634#1729#0" />
             <element signature="e#1836#2029#0" />
           </folding>
         </state>
@@ -562,13 +578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/render/UI/UI_Button.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/render/UI/ButtonAnimator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -590,24 +599,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/heroes/BuffFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/heroes/HeroState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#316#317#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -699,10 +694,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
           <caret line="81" selection-start-line="81" selection-end-line="81" />
-          <folding>
-            <element signature="e#2433#2434#0" expanded="true" />
-            <element signature="e#2487#2488#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -751,18 +742,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/map/locations/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="56" column="39" selection-start-line="56" selection-start-column="39" selection-end-line="56" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2021#2022#0" expanded="true" />
-            <element signature="e#2097#2098#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/monsters/Monsters.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -787,10 +766,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/res/possible_bugs.txt" />
+    <entry file="file://$PROJECT_DIR$/src/heroes/HeroFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/mechanics/fight/MonsterFight.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="134" column="27" selection-start-line="134" selection-start-column="27" selection-end-line="134" selection-end-column="27" />
+        <state relative-caret-position="308">
+          <caret line="96" column="39" lean-forward="true" selection-start-line="96" selection-start-column="39" selection-end-line="96" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#calculateWinner#0;class#MonsterFight#0" />
@@ -798,33 +788,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/heroes/Hero.java">
+    <entry file="file://$PROJECT_DIR$/src/render/UI/UI_Button.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="273" column="29" selection-start-line="273" selection-start-column="29" selection-end-line="273" selection-end-column="29" />
+        <state relative-caret-position="196">
+          <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/map/locations/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="59" column="67" selection-start-line="59" selection-start-column="67" selection-end-line="59" selection-end-column="67" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#875#1061#0" />
-            <element signature="e#1535#1628#0" />
-            <element signature="e#1634#1729#0" />
-            <element signature="e#1836#2029#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/possible_bugs.txt">
+    <entry file="file://$PROJECT_DIR$/src/heroes/BuffFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="37" selection-start-column="37" selection-end-column="37" />
+        <state relative-caret-position="192">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#523#524#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/heroes/HeroFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/heroes/Hero.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+        <state relative-caret-position="180">
+          <caret line="211" column="22" selection-start-line="211" selection-start-column="22" selection-end-line="211" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#875#1061#0" />
+            <element signature="e#1836#2029#0" />
           </folding>
         </state>
       </provider>
