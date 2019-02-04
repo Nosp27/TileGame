@@ -22,6 +22,7 @@ public abstract class Sprite {
 
     protected Sprite(String imagePath){
         order = 0;
+        if(imagePath != null)
         readImage(imagePath);
     }
 
@@ -31,12 +32,18 @@ public abstract class Sprite {
     }
 
     public void draw(Graphics g, int x, int y, int w, int h){
+        draw(g, x, y, w, h, null);
+    }
+
+    public void draw(Graphics g, int x, int y, int w, int h, Rectangle viewRect){
         if(w == 0)
             w = image.getWidth();
         if(h == 0)
             h = image.getHeight();
 
         rect = new Rectangle(x,y,w,h);
+
+        if(viewRect == null || rect.intersects(viewRect))
         g.drawImage(image, x, y, w, h, null);
     }
 

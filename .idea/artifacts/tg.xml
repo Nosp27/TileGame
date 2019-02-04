@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="tg">
+    <output-path>$PROJECT_DIR$/out/artifacts/tg</output-path>
+    <root id="archive" name="tg.jar">
+      <element id="module-output" name="TileGame" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/tg/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

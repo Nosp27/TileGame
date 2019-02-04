@@ -18,9 +18,9 @@ public class UI_Button extends UI_Sprite implements Child {
         return text;
     }
 
-    public UI_Button(String path, Runnable update) {
+    public UI_Button(String path) {
         super(path);
-        animator = new ButtonAnimator(path, update, this);
+        animator = new ButtonAnimator(path,this);
 
         //TODO: correct line
         animator.addState("click", "res/heroes/sorcer.png", 70);

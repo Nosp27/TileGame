@@ -11,10 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Location {
     static Random r = new Random();
-    String pathName;
-
-    //for sprites
-    List<String> paths;
+    private String pathName;
 
     //for location data
     List<Monster> monsters;
@@ -23,6 +20,10 @@ public class Location {
     int monsterFactor;
     int treasureFactor;
     int encounterFactor;
+
+    public String getPathName() {
+        return pathName;
+    }
 
     public int getMonsterFactor() {
         return monsterFactor;
@@ -36,16 +37,10 @@ public class Location {
         return treasureFactor;
     }
 
+
     Location(String pathName) {
         this.pathName = pathName;
-        paths = new LinkedList<>();
         monsters = new LinkedList<>();
-    }
-
-    public String getRandomTile(){
-        if(paths.size() == 0)
-            return null;
-        return paths.get(r.nextInt(paths.size()));
     }
 
     //get event for hero

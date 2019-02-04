@@ -11,8 +11,7 @@ public class GameController {
         mg.generateMap(15);
         Hero h = mg.addHero();
         GameFrame gf = new GameFrame(mg);
-        h.setWalkCallback(() -> gf.mainPanel.repaint());
-        h.start();
+        gf.mainPanel.startHero = h::start;
 
         h.giveOrder("seek");
         Scanner sc = new Scanner(System.in);

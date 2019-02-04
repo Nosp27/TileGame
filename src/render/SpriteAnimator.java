@@ -4,14 +4,16 @@ import java.awt.image.BufferedImage;
 
 public abstract class SpriteAnimator {
     protected Sprite animated;
-    protected Runnable refreshListener;
 
-    protected SpriteAnimator(Sprite animated, Runnable refresh) {
+    protected SpriteAnimator(Sprite animated) {
         this.animated = animated;
-        refreshListener = refresh;
     }
 
-    protected void setPath(String s){
+    private void setPath(String s){
         animated.readImage(s);
+    }
+
+    protected void setFrame(String s){
+        setPath(s);
     }
 }

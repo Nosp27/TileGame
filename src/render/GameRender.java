@@ -3,13 +3,12 @@ package render;
 import heroes.Hero;
 import map.MapGenerator;
 import map.locations.Location;
+import org.w3c.dom.css.Rect;
 import render.UI.UI_Button;
 import render.UI.UI_Panel;
 import render.UI.UI_Sprite;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,19 +16,20 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 public class GameRender extends JPanel {
     static Random r = new Random();
 
-    int sizeX = 100, sizeY = 100;
+    int sizeX = 200, sizeY = 200;
     int offsetX = 0;
     int offsetY = 0;
+
+    long b = 0;
+    long d = 0;
 
     LocationSprite[][] map;
 
@@ -39,6 +39,10 @@ public class GameRender extends JPanel {
     UI_Panel ctxMenuPanel;
     UI_Button ctx_btn;
 
+    Timer fps_timer;
+
+    public Runnable startHero;
+
     private MapGenerator generator;
 
     public GameRender(MapGenerator gen) {
@@ -47,7 +51,7 @@ public class GameRender extends JPanel {
         ui_sprites = new LinkedList<>();
 
         ctxMenuPanel = new UI_Panel("res/UI/ui_panel.png");
-        ctx_btn = new UI_Button("res/UI/ui_button.png", this::repaint);
+        ctx_btn = new UI_Button("res/UI/ui_button.png");
         ctxMenuPanel.addChild(ctx_btn);
 
         ui_sprites.add(ctxMenuPanel);
@@ -72,7 +76,22 @@ public class GameRender extends JPanel {
                     default:
                         return;
                 }
-                repaint();
+
+                fps_timer = new Timer("fps timer");
+                fps_timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        repaint();
+                    }
+                }, 20, 20);
+                b = System.currentTimeMillis();
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    startHero.run();
+                }
             }
         });
 
@@ -151,6 +170,9 @@ public class GameRender extends JPanel {
     }
 
     private void drawMap(Graphics g) {
+        d = System.currentTimeMillis() - b;
+        b = System.currentTimeMillis();
+        System.out.println("repaint() " + d);
         ExecutorService es = Executors.newCachedThreadPool();
         ExecutorCompletionService<Boolean> ecs = new ExecutorCompletionService<>(es);
 
@@ -162,16 +184,20 @@ public class GameRender extends JPanel {
                 final int ii = i;
                 final int jj = j;
                 final LocationSprite ls = map[i][j];
-                ecs.submit(() -> {ls.draw(g, jj * sizeX - offsetX, ii * sizeY + offsetY, sizeX, sizeY); return true;});
+                ecs.submit(() -> {
+                    ls.draw(g, jj * sizeX - offsetX, ii * sizeY + offsetY, sizeX, sizeY);
+                    return true;
+                });
             }
         }
-        for(int i = 0; i < map.length * map.length; i++){
+        for (int i = 0; i < map.length * map.length; i++) {
             try {
                 ecs.take();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        es.shutdown();
     }
 
     private void drawHeroes(Graphics g) {
@@ -204,7 +230,7 @@ public class GameRender extends JPanel {
         for (int i = 0; i < renderMap.length; ++i) {
             for (int j = 0; j < renderMap[i].length; ++j) {
                 //spawn next location
-                renderMap[i][j] = new LocationSprite(loc_map[i][j], loc_map[i][j].getRandomTile());
+                renderMap[i][j] = new LocationSprite(loc_map[i][j]);
             }
         }
         return renderMap;

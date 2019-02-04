@@ -3,10 +3,9 @@ package map.locations;
 import monsters.Monsters;
 
 import java.io.File;
-import java.util.Random;
+import java.util.*;
 
 public abstract class LocationFabric {
-    private static final String tileDirectory = "res/tiles/";
 
     public static Random r = new Random();
 
@@ -18,7 +17,6 @@ public abstract class LocationFabric {
 
     public static Location getTower() {
         Location l = new Location("tower");
-        fillImagePaths(l);
         return l;
     }
 
@@ -33,14 +31,12 @@ public abstract class LocationFabric {
     }
 
     public static Location getWoods() {
-        Location w = getCustom("wood", new int[][]{{8, 2}, {2, 0}, {15, 2}});
-        fillImagePaths(w);
+        Location w = getCustom("woodabitdead", new int[][]{{8, 2}, {2, 0}, {15, 2}});
         return w;
     }
 
     public static Location getPlain() {
-        Location f = getCustom("plain", new int[][]{{5, 1}, {1, 0}, {17, 3}});
-        fillImagePaths(f);
+        Location f = getCustom("plainsign", new int[][]{{5, 1}, {1, 0}, {17, 3}});
         return f;
     }
 
@@ -54,16 +50,5 @@ public abstract class LocationFabric {
 
         l.monsters.add(Monsters.getSpider());
         return l;
-    }
-
-    private static void fillImagePaths(Location l) {
-        try {
-            for (File f : new File(tileDirectory).listFiles()) {
-                if (f.getName().contains(l.pathName)) {
-                    l.paths.add(f.getPath());
-                }
-            }
-        } catch (NullPointerException ignore) {
-        }
     }
 }
