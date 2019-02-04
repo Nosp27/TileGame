@@ -12,7 +12,10 @@ public class GameFrame extends JFrame {
 
     public GameFrame(MapGenerator mg){
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setExtendedState(MAXIMIZED_BOTH);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        setSize(screenSize.width / 2, screenSize.height);
+        setLocation(screenSize.width/2, 0);
 
         mainPanel = new GameRender(mg);
         mainPanel.setBackground(Color.BLACK);

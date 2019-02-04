@@ -28,9 +28,6 @@ public class GameRender extends JPanel {
     int offsetX = 0;
     int offsetY = 0;
 
-    long b = 0;
-    long d = 0;
-
     LocationSprite[][] map;
 
     List<HeroSprite> heroes;
@@ -76,15 +73,6 @@ public class GameRender extends JPanel {
                     default:
                         return;
                 }
-
-                fps_timer = new Timer("fps timer");
-                fps_timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        repaint();
-                    }
-                }, 20, 20);
-                b = System.currentTimeMillis();
             }
 
             @Override
@@ -135,6 +123,16 @@ public class GameRender extends JPanel {
                 }
             }
         });
+
+        new Thread(() -> {
+            try {
+                while (true) {
+                    repaint();
+                    Thread.sleep(20);
+                }
+            } catch (InterruptedException exeption) {
+            }
+        }, "repaint thread").start();
     }
 
     private void getTileMenu(Sprite sp) {
@@ -143,8 +141,6 @@ public class GameRender extends JPanel {
 
         //hardcoded^ offset is already contained, needs to be removed
         ctxMenuPanel.plant(x + offsetX, y - offsetY);
-
-        repaint();
     }
 
     private void hideTileMenu() {
@@ -170,14 +166,15 @@ public class GameRender extends JPanel {
     }
 
     private void drawMap(Graphics g) {
-        d = System.currentTimeMillis() - b;
-        b = System.currentTimeMillis();
-        System.out.println("repaint() " + d);
         ExecutorService es = Executors.newCachedThreadPool();
         ExecutorCompletionService<Boolean> ecs = new ExecutorCompletionService<>(es);
 
-        if (map == null)
+        if (map == null){
             map = getMap();
+            offsetX = sizeX * generator.getMap().length/2 - getSize().width / 2;
+            offsetY = - sizeY * generator.getMap()[0].length/2 + getSize().height / 2;
+        }
+
 
         for (int i = 0; i < map.length; ++i) {
             for (int j = 0; j < map[i].length; ++j) {
