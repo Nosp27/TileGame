@@ -12,7 +12,7 @@ public class HeroFactory {
         Hero h = getCustomHero(mg);
         h.pathName = "sorcer";
         h.pathName = getPath(h);
-        h.basePower = 11;
+        h.basePower = 8;
         return h;
     }
 

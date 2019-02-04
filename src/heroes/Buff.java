@@ -32,4 +32,9 @@ public abstract class Buff {
             return false;
         return getID() == ((Buff) obj).getID();
     }
+
+    @Override
+    public int hashCode() {
+        return ((Integer)id).hashCode();
+    }
 }

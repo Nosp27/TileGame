@@ -19,8 +19,8 @@ public class Hero extends Thread {
     private MapGenerator mg;
 
     int basePower;
-    float retreatBonus;
-    float dreadModifier;
+    float retreatBase;
+    float dreadBase;
 
     //hero control
     private volatile boolean gotNewOrder;
@@ -73,12 +73,23 @@ public class Hero extends Thread {
     }
 
     public float getRetreatBonus() {
-        //TODO: add buffs
+        if (monsterFight == null)
+            return retreatBase;
+        float retreatBonus = retreatBase;
+        for (Buff buff : buffs) {
+            retreatBonus += buff.retreatBuff(monsterFight);
+        }
         return retreatBonus;
     }
 
     public float getDreadModifier() {
-        //TODO: add buffs
+        if (monsterFight == null) {
+            return dreadBase;
+        }
+        float dreadModifier = dreadBase;
+        for (Buff buff : buffs) {
+            dreadModifier += buff.dreadBuff(monsterFight);
+        }
         return dreadModifier;
     }
 
@@ -157,7 +168,7 @@ public class Hero extends Thread {
 
     public void giveOrder(String order) {
 
-        if(heroAutomat.getCurrentState() != HeroState.IDLE)
+        if (heroAutomat.getCurrentState() != HeroState.IDLE)
             return;
 
         giveOrderInternal(order);
@@ -176,11 +187,19 @@ public class Hero extends Thread {
     private void executeOrder() {
         System.out.println("execute: " + command);
         //execute
-        route = mg.calculateRoute(this);
-
         switch (command) {
-            case "seek": heroAutomat.transit(HeroState.WALKING); break;
-            case "return": heroAutomat.transit(HeroState.RETURNING);break;
+            case "seek":
+                heroAutomat.transit(HeroState.WALKING);
+                route = mg.calculateRoute(this);
+                break;
+            case "return":
+                heroAutomat.transit(HeroState.RETURNING);
+                route = mg.calculateRoute(this);
+                break;
+            case "buffs":
+                System.out.println(buffs.size() + " buffs");
+                for (Buff b : buffs) System.out.println("\t>buff#" + b.getID());
+                break;
         }
     }
 
@@ -266,15 +285,18 @@ public class Hero extends Thread {
 
     private void retreat() {
         heroAutomat.transitBack();
+        monsterFight = null;
     }
 
     private void wound() {
         //TODO: process wound
         giveOrderInternal("return");
+        monsterFight = null;
     }
 
     private void die() {
         //TODO: hero death
+        monsterFight = null;
     }
 
     private void collectPrize() {
@@ -283,6 +305,7 @@ public class Hero extends Thread {
                 buffs.add(b);
         }
         heroAutomat.transitBack();
+        monsterFight = null;
     }
     //
 }

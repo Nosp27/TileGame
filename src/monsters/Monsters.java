@@ -1,5 +1,7 @@
 package monsters;
 
+import heroes.BuffFactory;
+
 public class Monsters {
     public static Monster getSpider(){
         Monster spider = getCustom();

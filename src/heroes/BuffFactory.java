@@ -4,7 +4,7 @@ import mechanics.fight.MonsterFight;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BuffFactory {
-    public Buff getLustBuff(float power) {
+    public static Buff getLustBuff(float power) {
         return new Buff() {
             @Override
             public int powerBuff(MonsterFight fight) {
@@ -13,7 +13,7 @@ public class BuffFactory {
         };
     }
 
-    public Buff raceBuff() {//TODO: implement race buff
+    public static Buff raceBuff() {//TODO: implement race buff
         throw new NotImplementedException();
     }
 }
