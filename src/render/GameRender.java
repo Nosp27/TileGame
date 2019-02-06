@@ -228,8 +228,22 @@ public class GameRender extends JPanel {
             for (int j = 0; j < renderMap[i].length; ++j) {
                 //spawn next location
                 renderMap[i][j] = new LocationSprite(loc_map[i][j]);
+                renderMap[i][j].generateBorders(getNear(i, j));
             }
         }
         return renderMap;
+    }
+
+    private List<Location> getNear(int i, int j){
+        List<Location> lss = new LinkedList<>();
+        _try_add(lss, i, j - 1);
+        _try_add(lss, i - 1, j);
+        _try_add(lss, i, j + 1);
+        _try_add(lss, i + 1, j);
+        return lss;
+    }
+
+    private void _try_add(List<Location> list, int i, int j){
+        try{list.add(generator.getMap()[i][j]);}catch(Throwable ignore){}
     }
 }

@@ -36,7 +36,7 @@ public abstract class LocationFabric {
     }
 
     public static Location getPlain() {
-        Location f = getCustom("plainsigngreen", new int[][]{{5, 1}, {1, 0}, {17, 3}});
+        Location f = getCustom("plainsignyellow", new int[][]{{5, 1}, {1, 0}, {17, 3}});
         return f;
     }
 
