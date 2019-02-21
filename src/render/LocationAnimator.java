@@ -1,43 +1,96 @@
 package render;
 
 import javafx.util.Pair;
+import sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.sql.Time;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LocationAnimator extends SpriteAnimator {
     boolean isPlaying;
-    List<Pair<String, Long>> frames;
+    final List<Pair<String, Long>> frames;
+    volatile int frameIndex = 0;
 
-    static Timer playTimer = new Timer("location animator timer");
+    private class AnimatorTask {
+        final Runnable frameSet = this::fs;
+        volatile Long offset;
+        volatile Long counter;
+
+        AnimatorTask(Long offset) {
+            this.offset = offset;
+            counter = 0L;
+        }
+
+        synchronized void fs() {
+            counter = setNextFrame();
+        }
+    }
+
+    private static final Vector<AnimatorTask> tasks = new Vector<>();
+
+    static Thread playTimer = new Thread(() -> {
+        try {
+            long interval = 20;
+
+            while (true) {
+                synchronized (tasks) {
+                    boolean b = false;
+                    for (AnimatorTask task : tasks) {
+                        if (task.offset > 0) {
+                            task.offset -= interval;
+                            continue;
+                        }
+
+                        if (task.counter <= 0) {
+                            task.frameSet.run();
+                        } else {
+                            task.counter -= interval;
+                            if (!b) {
+                                //System.out.println(task.counter);
+                                b = true;
+                            }
+                        }
+
+                    }
+                }
+                Thread.sleep(interval);
+            }
+        } catch (InterruptedException ignore) {
+
+        }
+    });
 
     protected LocationAnimator(Sprite animated) {
         super(animated);
         //TODO: location animator
         frames = new LinkedList<>();
         isPlaying = false;
+
+        if (!playTimer.isAlive())
+            playTimer.start();
     }
 
-    public void addFrame(String path, long delay){
+    public void addFrame(String path, long delay) {
         frames.add(new Pair<>(path, delay));
     }
 
-    public void play(){
-        if(isPlaying){
+    public void play() {
+        if (isPlaying) {
             return;
         }
-        long delay = ThreadLocalRandom.current().nextLong(700);
-        for(Pair<String, Long> frame : frames){
-            playTimer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    setFrame(frame.getKey());
-                }
-            }, delay, frame.getValue());
-            delay += frame.getValue();
+
+        synchronized (tasks) {
+            long delay = ThreadLocalRandom.current().nextLong(2000);
+            tasks.add(new AnimatorTask(delay));
         }
+
+    }
+
+    private synchronized long setNextFrame() {
+        Pair<String, Long> frame = frames.get(frameIndex);
+        setFrame(frame.getKey());
+        frameIndex = (frameIndex + 1) % frames.size();
+        return frame.getValue();
     }
 }

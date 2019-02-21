@@ -48,7 +48,7 @@ public class LocationSprite extends Sprite {
     }
 
     private void initAnimationFrames() {
-        Long[] delays = new Long[]{1800L, 4300L};
+        Long[] delays = new Long[]{800L, 4300L};
 
         String name = location.getPathName();
 

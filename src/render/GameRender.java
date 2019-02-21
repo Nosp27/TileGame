@@ -71,14 +71,15 @@ public class GameRender extends JPanel {
                         offsetY -= sizeY;
                         break;
                     default:
-                        return;
+                        break;
                 }
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && startHero!=null) {
                     startHero.run();
+                    startHero = null;
                 }
             }
         });
