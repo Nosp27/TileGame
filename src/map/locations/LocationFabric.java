@@ -1,5 +1,6 @@
 package map.locations;
 
+import monsters.Monster;
 import monsters.Monsters;
 
 import java.io.File;
@@ -32,11 +33,14 @@ public abstract class LocationFabric {
 
     public static Location getWoods() {
         Location w = getCustom("woodabitdead", new int[][]{{8, 2}, {2, 0}, {15, 2}});
+        w.monsters.add(Monsters.getSpider());
+        w.monsters.add(Monsters.getOccult());
         return w;
     }
 
     public static Location getPlain() {
         Location f = getCustom("plainsignyellow", new int[][]{{5, 1}, {1, 0}, {17, 3}});
+        f.monsters.add(Monsters.getWolf());
         return f;
     }
 
@@ -47,8 +51,6 @@ public abstract class LocationFabric {
             l.treasureFactor = etm_stats[1][0] + (int) (r.nextGaussian() * etm_stats[1][1]);
             l.monsterFactor = etm_stats[2][0] + (int) (r.nextGaussian() * etm_stats[2][1]);
         }
-
-        l.monsters.add(Monsters.getSpider());
         return l;
     }
 }

@@ -2,6 +2,7 @@ package map.locations;
 
 import heroes.Hero;
 import javafx.util.Pair;
+import mechanics.quests.MonsterQuest;
 import monsters.Monster;
 
 import java.util.LinkedList;
@@ -72,5 +73,10 @@ public class Location {
 
     private boolean check(int parameter){
         return parameter <= ThreadLocalRandom.current().nextInt(100);
+    }
+
+    public void setQuestMonsters(MonsterQuest q) {
+        this.monsters.clear();
+        this.monsters.addAll(q.getMonsters());
     }
 }

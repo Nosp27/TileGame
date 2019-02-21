@@ -1,0 +1,20 @@
+
+1	>order: seek
+2495		>execute: seek
+2507		>walk----------------------------go to 7 8
+2936		>walk----------------------------go to 6 8
+2937			>met occult
+3526		>fight
+3950		>fight----------------------------ff with state PROCESS
+4150			>hero lose
+4150			>wound runs
+4150	>order: return
+4380		>execute: return
+4381		>returning----------------------------go to 6 7
+4888		>returning----------------------------go to 7 7
+5318		>returning
+5318		>idle
+12036	>order: return
+12360		>execute: return
+12361		>returning
+12362		>idle

@@ -1,0 +1,64 @@
+
+1	>order: seek
+2531		>execute: seek
+2543		>walk----------------------------go to 8 7
+2550			>met wolf
+2972		>fight
+3562		>fight----------------------------ff with state PROCESS
+3757			>hero win
+3970				>hero gets buffs
+3970					>buff race buff
+3971						>add
+3986		>walk----------------------------go to 9 7
+3986			>met occult
+4416		>fight
+4923		>fight----------------------------ff with state PROCESS
+5200			>hero win
+5338				>hero gets buffs
+5338					>buff demon posession
+5339						>add
+5354		>walk----------------------------go to 9 6
+5354			>met wolf
+5784		>fight
+6215		>fight----------------------------ff with state PROCESS
+6568			>hero win
+6630				>hero gets buffs
+6630					>buff race buff
+6630						>improve
+6667		>walk----------------------------go to 10 6
+6667			>met spider
+7090		>fight
+7521		>fight----------------------------ff with state PROCESS
+7874			>hero win
+7936				>hero gets buffs
+7951		>walk----------------------------go to 11 6
+7952			>met wolf
+8382		>fight
+8812		>fight----------------------------ff with state PROCESS
+9173			>hero win
+9228				>hero gets buffs
+9229					>buff race buff
+9229						>improve
+9245		>walk----------------------------go to 12 6
+9245			>met spider
+9680		>fight
+10383		>fight----------------------------ff with state PROCESS
+10476			>hero win
+10818				>hero gets buffs
+10925		>walk----------------------------go to 13 6
+10927			>met occult
+11542		>fight
+11965		>fight----------------------------ff with state PROCESS
+12160			>hero lose
+12160			>wound runs
+12160	>order: return
+12396		>execute: return
+12397		>returning----------------------------go to 12 6
+12825		>returning----------------------------go to 11 6
+13257		>returning----------------------------go to 10 6
+13686		>returning----------------------------go to 9 6
+14116		>returning----------------------------go to 8 6
+14547		>returning----------------------------go to 7 6
+14977		>returning----------------------------go to 7 7
+15408		>returning
+15408		>idle

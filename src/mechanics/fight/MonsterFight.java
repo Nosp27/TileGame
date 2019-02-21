@@ -1,6 +1,7 @@
 package mechanics.fight;
 
 import heroes.Hero;
+import mechanics.Logger;
 import monsters.Monster;
 
 import java.util.Timer;
@@ -25,17 +26,17 @@ public class MonsterFight {
         this.retreat = retreat;
 
         state = FightState.BEGIN;
-
-        System.out.println("met " + m.getType());
         hero = h;
         monster = m;
+
+        Logger.log(hero, 2, "met " + m.getType());
         if (wantsToRetreat()) {
-            System.out.println("want retreat");
+            Logger.log(hero, 2, "want retreat");
             processRetreat();
-            System.out.println("tried retreat, state: " + state);
+            Logger.log(hero, 2, "tried retreat, state: " + state);
         }
 
-        if(state == FightState.BEGIN)
+        if (state == FightState.BEGIN)
             state = FightState.PROCESS;
         fightTimer = new Timer("fight timer");
         fightTimer.schedule(new TimerTask() {
@@ -115,16 +116,16 @@ public class MonsterFight {
     }
 
     private void finishFight() {
-        System.out.println("ff with state " + state.name());
+        Logger.logInline(hero, "ff with state " + state.name());
         switch (state) {
             case PROCESS:
                 state = FightState.END;
                 if (calculateWinner()) {
                     //boost up hero
-                    System.out.println("hero win");
+                    Logger.log(hero, 2, "hero win");
                     gain.run();
                 } else {
-                    System.out.println("hero lose");
+                    Logger.log(hero, 2, "hero lose");
                     if (isFatal()) {
                         die.run();
                     } else {

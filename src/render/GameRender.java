@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 public class GameRender extends JPanel {
     static Random r = new Random();
 
+    JLabel[] ls;
+
     int sizeX = 200, sizeY = 200;
     int offsetX = 0;
     int offsetY = 0;
@@ -36,11 +38,10 @@ public class GameRender extends JPanel {
     UI_Panel ctxMenuPanel;
     UI_Button ctx_btn;
 
-    Timer fps_timer;
-
     public Runnable startHero;
 
     private MapGenerator generator;
+    private Rectangle markingRect;
 
     public GameRender(MapGenerator gen) {
         generator = gen;
@@ -169,10 +170,10 @@ public class GameRender extends JPanel {
         ExecutorService es = Executors.newCachedThreadPool();
         ExecutorCompletionService<Boolean> ecs = new ExecutorCompletionService<>(es);
 
-        if (map == null){
+        if (map == null) {
             map = getMap();
-            offsetX = sizeX * generator.getMap().length/2 - getSize().width / 2;
-            offsetY = - sizeY * generator.getMap()[0].length/2 + getSize().height / 2;
+            offsetX = sizeX * generator.getMap().length / 2 - getSize().width / 2;
+            offsetY = -sizeY * generator.getMap()[0].length / 2 + getSize().height / 2;
         }
 
 
@@ -234,7 +235,7 @@ public class GameRender extends JPanel {
         return renderMap;
     }
 
-    private List<Location> getNear(int i, int j){
+    private List<Location> getNear(int i, int j) {
         List<Location> lss = new LinkedList<>();
         _try_add(lss, i, j - 1);
         _try_add(lss, i - 1, j);
@@ -243,7 +244,20 @@ public class GameRender extends JPanel {
         return lss;
     }
 
-    private void _try_add(List<Location> list, int i, int j){
-        try{list.add(generator.getMap()[i][j]);}catch(Throwable ignore){}
+    private void _try_add(List<Location> list, int i, int j) {
+        try {
+            list.add(generator.getMap()[i][j]);
+        } catch (Throwable ignore) {
+        }
+    }
+
+    void markTile(Graphics g) {
+        if (markingRect == null)
+            return;
+
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.setColor(Color.RED);
+        g2D.setStroke(new BasicStroke(4));
+        g2D.draw(markingRect);
     }
 }

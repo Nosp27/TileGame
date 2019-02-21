@@ -4,14 +4,14 @@ import mechanics.fight.MonsterFight;
 
 public abstract class Buff {
     private static int counter = 0;
-    private int id;
+    String type;
 
-    {
-        id = counter++;
+    protected Buff(String _type){
+        type = _type;
     }
 
-    public int getID() {
-        return id;
+    public String getType() {
+        return type;
     }
 
     public int powerBuff(MonsterFight fight) {
@@ -26,15 +26,19 @@ public abstract class Buff {
         return 0;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!obj.getClass().equals(getClass()))
-            return false;
-        return getID() == ((Buff) obj).getID();
+    public void winAction(MonsterFight fight) {
+    }
+
+    public void loseAction(MonsterFight fight) {
     }
 
     @Override
     public int hashCode() {
-        return ((Integer)id).hashCode();
+        return type.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return hashCode() == obj.hashCode();
     }
 }

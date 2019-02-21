@@ -1,0 +1,30 @@
+
+1	>order: seek
+5882		>execute: seek
+5967		>walk----------------------------go to 8 7
+6064			>met occult
+6488		>fight
+6918		>fight----------------------------ff with state PROCESS
+7295			>hero win
+7333				>hero gets buffs
+7333					>buff demon posession
+7334						>add
+7348		>walk----------------------------go to 8 6
+7779		>walk----------------------------go to 8 5
+7779			>met occult
+8210		>fight
+8639		>fight----------------------------ff with state PROCESS
+8994			>hero win
+9040				>hero gets buffs
+9040					>buff demon posession
+9040						>improve
+9067		>walk----------------------------go to 8 4
+9067			>met occult
+9486		>fight
+9916		>fight----------------------------ff with state PROCESS
+10270			>hero win
+10331				>hero gets buffs
+10331					>buff demon posession
+10331						>improve
+10348		>walk
+10348		>idle

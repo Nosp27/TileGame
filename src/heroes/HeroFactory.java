@@ -8,7 +8,6 @@ public class HeroFactory {
     static final String directory = "res/heroes/";
 
     public static Hero sorcerer(MapGenerator mg) {
-        //TODO: sorcerer
         Hero h = getCustomHero(mg);
         h.pathName = "sorcer";
         h.pathName = getPath(h);

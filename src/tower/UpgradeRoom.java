@@ -1,4 +1,5 @@
 package tower;
 
-public class UpgradeRoom {
+public class UpgradeRoom extends Room {
+
 }

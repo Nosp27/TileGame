@@ -5,14 +5,13 @@ import heroes.HeroFactory;
 import javafx.util.Pair;
 import map.locations.Location;
 import map.locations.LocationFabric;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import mechanics.Logger;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class MapGenerator {
     int size;
@@ -24,18 +23,61 @@ public class MapGenerator {
     }
 
     public void generateMap(int size) {
-        //TODO: map generator
         this.size = size;
         map = new Location[size][size];
+
+        generateRandomTileSet();
+        createClusters(3, 6, 4);
+        createTower();
+    }
+
+    private void createTower(){
         int towerCoord = size / 2;
         map[towerCoord][towerCoord] = LocationFabric.getTower();
+    }
 
+    private void generateRandomTileSet(){
         for (int i = 0; i < size; ++i)
             for (int j = 0; j < size; ++j) {
                 if (map[i][j] == null) {
                     map[i][j] = LocationFabric.getRandomLocation();
                 }
             }
+    }
+
+    private void createClusters(int n, int _size, int deviation){
+        for(int i = 0; i < n; i++){
+            Location l = LocationFabric.getPlain();
+
+            int realSize = ThreadLocalRandom.current().nextInt(-deviation/2, deviation/2) + _size;
+            int row = ThreadLocalRandom.current().nextInt(size);
+            int col = ThreadLocalRandom.current().nextInt(size);
+
+            if(realSize <= 0)
+                throw new IllegalArgumentException();
+
+            class _iterationCompleter{
+                void iteration(int remained, int row, int col){
+                    if(remained == 0)
+                        return;
+
+                    if(row < 0 || col < 0 || row >= size || col >= size)
+                        return;
+
+                    if(ThreadLocalRandom.current().nextInt(10) < 1)
+                        return;
+
+                    map[row][col] = l;
+
+                    iteration(remained-1, row-1, col);
+                    iteration(remained-1, row+1, col);
+                    iteration(remained-1, row, col-1);
+                    iteration(remained-1, row, col+1);
+                }
+            }
+
+            new _iterationCompleter().iteration(realSize, row, col);
+        }
     }
 
     public Hero addHero() {
@@ -55,9 +97,7 @@ public class MapGenerator {
     }
 
     public Stack<Integer[]> calculateRoute(Hero hero) {
-        System.out.println("calculating route (" + Thread.currentThread() + ")");
         synchronized (hero){
-            System.out.println("calculating route2");
             Stack<Integer[]> route = new Stack<>();
 
             int startX = hero.getX();

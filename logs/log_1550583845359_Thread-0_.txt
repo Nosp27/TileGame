@@ -1,0 +1,75 @@
+
+2	>order: seek
+5924		>execute: seek
+6009		>walk----------------------------go to 6 7
+6106			>met spider
+6530		>fight
+6960		>fight----------------------------ff with state PROCESS
+7337			>hero win
+7375				>hero gets buffs
+7390		>walk----------------------------go to 6 6
+7391			>met spider
+7821		>fight
+8252		>fight----------------------------ff with state PROCESS
+8605			>hero win
+8666				>hero gets buffs
+8683		>walk----------------------------go to 6 5
+8684			>met occult
+9128		>fight
+9558		>fight----------------------------ff with state PROCESS
+9897			>hero win
+9974				>hero gets buffs
+9974					>buff demon posession
+9974						>add
+9989		>walk----------------------------go to 6 4
+9989			>met spider
+10420		>fight
+10850		>fight----------------------------ff with state PROCESS
+11203			>hero win
+11265				>hero gets buffs
+11287		>walk----------------------------go to 5 4
+11287			>met spider
+11711		>fight
+12141		>fight----------------------------ff with state PROCESS
+12495			>hero win
+12556				>hero gets buffs
+12575		>walk----------------------------go to 4 4
+12575			>met spider
+13002		>fight
+13433		>fight----------------------------ff with state PROCESS
+13786			>hero win
+13847				>hero gets buffs
+13892		>walk----------------------------go to 3 4
+13892			>met spider
+14309		>fight
+14739		>fight----------------------------ff with state PROCESS
+15093			>hero win
+15154				>hero gets buffs
+15170		>walk----------------------------go to 3 3
+15170			>met spider
+15600		>fight
+16031		>fight----------------------------ff with state PROCESS
+16385			>hero win
+16446				>hero gets buffs
+16461		>walk----------------------------go to 2 3
+16461			>met spider
+16892		>fight
+17322		>fight----------------------------ff with state PROCESS
+17661			>hero win
+17724				>hero gets buffs
+17738		>walk----------------------------go to 2 2
+17738			>met occult
+18169		>fight
+18599		>fight----------------------------ff with state PROCESS
+18953			>hero win
+19014				>hero gets buffs
+19014					>buff demon posession
+19014						>improve
+19036		>walk----------------------------go to 1 2
+19036			>met spider
+19460		>fight
+19890		>fight----------------------------ff with state PROCESS
+20244			>hero win
+20305				>hero gets buffs
+20327		>walk
+20327		>idle

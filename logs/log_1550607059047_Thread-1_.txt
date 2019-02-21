@@ -1,0 +1,49 @@
+
+1	>order: seek
+2230		>execute: seek
+2237		>walk----------------------------go to 7 6
+2282			>met wolf
+2700		>fight
+3131		>fight----------------------------ff with state PROCESS
+3519			>hero win
+3564				>hero gets buffs
+3564					>buff race buff
+3565						>add
+3577		>walk----------------------------go to 8 6
+3577			>met spider
+4007		>fight
+4438		>fight----------------------------ff with state PROCESS
+4794			>hero win
+4853				>hero gets buffs
+4887		>walk----------------------------go to 9 6
+4887			>met wolf
+5314		>fight
+5745		>fight----------------------------ff with state PROCESS
+6099			>hero win
+6160				>hero gets buffs
+6160					>buff race buff
+6165						>improve
+6176		>walk----------------------------go to 10 6
+6176			>met spider
+6606		>fight
+7036		>fight----------------------------ff with state PROCESS
+7390			>hero win
+7451				>hero gets buffs
+7467		>walk----------------------------go to 11 6
+7467			>met occult
+7897		>fight
+8328		>fight----------------------------ff with state PROCESS
+8681			>hero win
+8743				>hero gets buffs
+8743					>buff demon posession
+8743						>add
+8758		>walk----------------------------go to 12 6
+8758			>met wolf
+9189		>fight
+9619		>fight----------------------------ff with state PROCESS
+9973			>hero win
+10035				>hero gets buffs
+10035					>buff race buff
+10035						>improve
+10050		>walk
+10050		>idle
