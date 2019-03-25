@@ -1,29 +1,45 @@
 package render.UI;
 
-import render.SpriteAnimator;
-import sun.font.FontFamily;
-
 import java.awt.*;
+import java.util.LinkedList;
 
 public class UI_Button extends UI_Sprite implements Child {
-    private String text = "sas";
-    Point textOffset = new Point(3, 11);
-    ButtonAnimator animator;
+    private String text = "sas"; //text displayed on btn
 
+    Point textOffset = new Point(3, 11);
+
+    ButtonAnimator animator; // animator for rendering click reaction
+
+    Runnable onClickInternal; // on click settings for builder
+
+    public LinkedList<Runnable> listenerList = new LinkedList<>();
+
+    /**
+     * Set text to display on button
+     * @param text - text to display
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+
+    /**
+     * Get text displayed on button
+     * @return String with text on button
+     */
     public String getText() {
         return text;
     }
 
-    public UI_Button(String path) {
+
+    /**
+     * Button constructor
+     * @param path - path to the Sprite file
+     * @param clickedPath - path to clicked Sprite file
+     */
+    UI_Button(String path, String clickedPath) {
         super(path);
         animator = new ButtonAnimator(path,this);
-
-        //TODO: correct line
-        animator.addState("click", "res/heroes/sorcer.png", 70);
         order = 125;
     }
 
@@ -57,7 +73,6 @@ public class UI_Button extends UI_Sprite implements Child {
 
     @Override
     public void onClick() {
-        System.out.println("button click");
-        animator.playState("click");
+        onClickInternal.run();
     }
 }

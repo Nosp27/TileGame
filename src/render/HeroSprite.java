@@ -5,7 +5,7 @@ import heroes.Hero;
 import java.awt.*;
 
 public class HeroSprite extends Sprite {
-    public Hero hero;
+    private Hero hero;
 
     public HeroSprite(Hero h) {
         super(h.getPathName(), 100);
@@ -15,5 +15,9 @@ public class HeroSprite extends Sprite {
     @Override
     public void onClick() {
 
+    }
+
+    public heroes.Hero getHero() {
+        return hero;
     }
 }

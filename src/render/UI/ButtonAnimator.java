@@ -7,7 +7,9 @@ import java.util.*;
 
 public class ButtonAnimator extends SpriteAnimator {
 
-    Map<String, State> states;
+    private Map<String, State> states;
+
+    private String stateName;
 
     public ButtonAnimator(String idlePath, Sprite animated){
         super(animated);
@@ -23,17 +25,20 @@ public class ButtonAnimator extends SpriteAnimator {
         if(!states.containsKey(name))
             return;
 
-        State s = states.get(name);
+        State current = states.get(name);
+        stateName = name;
 
-        setFrame(s.path);
+        setFrame(current.path);
 
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                setFrame(states.get("idle").path);
-            }
-        }, s.delay_ms);
+        if(current.delay_ms > 0){
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    setFrame(states.get("idle").path);
+                }
+            }, current.delay_ms);
+        }
     }
 
     class State{
@@ -43,5 +48,9 @@ public class ButtonAnimator extends SpriteAnimator {
         }
         public String path;
         public int delay_ms;
+    }
+
+    public String getStateName(){
+        return stateName;
     }
 }

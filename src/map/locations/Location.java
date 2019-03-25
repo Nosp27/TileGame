@@ -13,6 +13,12 @@ public class Location {
     static Random r = new Random();
     private String pathName;
 
+    String name;
+
+    public String getName() {
+        return name;
+    }
+
     //for location data
     List<Monster> monsters;
     //

@@ -4,6 +4,7 @@ import heroes.Hero;
 import map.MapGenerator;
 import map.locations.Location;
 import org.w3c.dom.css.Rect;
+import render.UI.Buttons;
 import render.UI.UI_Button;
 import render.UI.UI_Panel;
 import render.UI.UI_Sprite;
@@ -22,8 +23,6 @@ import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 public class GameRender extends JPanel {
-    static Random r = new Random();
-
     int sizeX = 200, sizeY = 200;
     int offsetX = 0;
     int offsetY = 0;
@@ -36,19 +35,25 @@ public class GameRender extends JPanel {
     UI_Panel ctxMenuPanel;
     UI_Button ctx_btn;
 
-    Timer fps_timer;
-
     public Runnable startHero;
 
     private MapGenerator generator;
+    private GameFrame gameFrame;
 
-    public GameRender(MapGenerator gen) {
+    public GameRender(MapGenerator gen, GameFrame _gameFrame) {
+        gameFrame = _gameFrame;
         generator = gen;
         heroes = new LinkedList<>();
         ui_sprites = new LinkedList<>();
 
         ctxMenuPanel = new UI_Panel("res/UI/ui_panel.png");
-        ctx_btn = new UI_Button("res/UI/ui_button.png");
+
+        ctx_btn = new Buttons()
+                .setState(Buttons.ButtonState.ONE_SHOT)
+                .setIdlePath("res/UI/ui_button.png")
+                .setClickedPath("res/UI/ui_button.png")
+                .build();
+
         ctxMenuPanel.addChild(ctx_btn);
 
         ui_sprites.add(ctxMenuPanel);
@@ -77,7 +82,7 @@ public class GameRender extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && startHero!=null) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && startHero != null) {
                     startHero.run();
                     startHero = null;
                 }
@@ -85,45 +90,56 @@ public class GameRender extends JPanel {
         });
 
         addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                //hideTileMenu();
+                             @Override
+                             public void mouseClicked(MouseEvent e) {
+                                 super.mouseClicked(e);
+                                 //hideTileMenu();
 
-                switch (e.getButton()) {
-                    case MouseEvent.BUTTON1:
-                        LinkedList<Sprite> clicked = new LinkedList<>();
-                        getAllSprites().forEach(s ->
-                        {
-                            if (s.checkClick(e.getPoint()))
-                                clicked.add(s);
-                        });
+                                 switch (e.getButton()) {
+                                     case MouseEvent.BUTTON1://left button
+                                         LinkedList<Sprite> clicked = new LinkedList<>();
+                                         getAllSprites().forEach(s ->
+                                         {
+                                             if (s.checkClick(e.getPoint()))
+                                                 clicked.add(s);
+                                         });
 
-                        if (clicked.size() == 0)
-                            return;
+                                         if (clicked.size() == 0)
+                                             return;
 
-                        clicked.sort(Comparator.comparingInt(o -> o.order));
-                        clicked.getLast().onClick();
-                        break;
+                                         //get clicked sprite with highest order
+                                         clicked.sort(Comparator.comparingInt(o -> o.order));
 
-                    case MouseEvent.BUTTON3:
-                        LinkedList<Sprite> clickedMap = new LinkedList<>();
-                        for (Sprite[] ss : map)
-                            for (Sprite s : ss)
-                                if (s.checkClick(e.getPoint()))
-                                    clickedMap.add(s);
+                                         clicked.getLast().onClick();
+                                         break;
 
-                        if (clickedMap.size() == 0)
-                            return;
+                                     case MouseEvent.BUTTON3:
+                                         LinkedList<Sprite> clickedMap = new LinkedList<>();
+                                         for (Sprite[] ss : map)
+                                             for (Sprite s : ss)
+                                                 if (s.checkClick(e.getPoint()))
+                                                     clickedMap.add(s);
 
-                        clickedMap.getFirst().onClick();
-                        getTileMenu(clickedMap.element());
-                        break;
-                    default:
-                        return;
-                }
-            }
-        });
+                                         if (clickedMap.size() == 0)
+                                             return;
+
+                                         processClick(clickedMap.getFirst());
+                                         clickedMap.getFirst().onClick();
+                                         getTileMenu(clickedMap.element());
+                                         break;
+                                     default:
+                                         return;
+                                 }
+                             }
+
+                             private void processClick(Sprite last) {
+                                 if(last instanceof LocationSprite)
+                                     gameFrame.undertray.selectLocation(((LocationSprite) last).getLocation());
+                                 else if(last instanceof HeroSprite)
+                                     gameFrame.undertray.selectHero(((HeroSprite) last).getHero());
+                             }
+                         }
+        );
 
         new Thread(() -> {
             try {
@@ -170,10 +186,10 @@ public class GameRender extends JPanel {
         ExecutorService es = Executors.newCachedThreadPool();
         ExecutorCompletionService<Boolean> ecs = new ExecutorCompletionService<>(es);
 
-        if (map == null){
+        if (map == null) {
             map = getMap();
-            offsetX = sizeX * generator.getMap().length/2 - getSize().width / 2;
-            offsetY = - sizeY * generator.getMap()[0].length/2 + getSize().height / 2;
+            offsetX = sizeX * generator.getMap().length / 2 - getSize().width / 2;
+            offsetY = -sizeY * generator.getMap()[0].length / 2 + getSize().height / 2;
         }
 
 
@@ -203,7 +219,7 @@ public class GameRender extends JPanel {
             heroes = getHeroes();
 
         for (HeroSprite hs : heroes) {
-            hs.draw(g, hs.hero.getX() * sizeX + sizeX / 2 - offsetX, hs.hero.getY() * sizeY + sizeY / 2 + offsetY, 0, 0);
+            hs.draw(g, hs.getHero().getX() * sizeX + sizeX / 2 - offsetX, hs.getHero().getY() * sizeY + sizeY / 2 + offsetY, 0, 0);
         }
     }
 
@@ -235,7 +251,7 @@ public class GameRender extends JPanel {
         return renderMap;
     }
 
-    private List<Location> getNear(int i, int j){
+    private List<Location> getNear(int i, int j) {
         List<Location> lss = new LinkedList<>();
         _try_add(lss, i, j - 1);
         _try_add(lss, i - 1, j);
@@ -244,7 +260,10 @@ public class GameRender extends JPanel {
         return lss;
     }
 
-    private void _try_add(List<Location> list, int i, int j){
-        try{list.add(generator.getMap()[i][j]);}catch(Throwable ignore){}
+    private void _try_add(List<Location> list, int i, int j) {
+        try {
+            list.add(generator.getMap()[i][j]);
+        } catch (Throwable ignore) {
+        }
     }
 }

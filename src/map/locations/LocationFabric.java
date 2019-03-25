@@ -17,6 +17,7 @@ public abstract class LocationFabric {
 
     public static Location getTower() {
         Location l = new Location("tower");
+        l.name = "The Tower";
         return l;
     }
 
@@ -32,11 +33,13 @@ public abstract class LocationFabric {
 
     public static Location getWoods() {
         Location w = getCustom("woodabitdead", new int[][]{{8, 2}, {2, 0}, {15, 2}});
+        w.name = "Wood. Seems to be a bit dead...";
         return w;
     }
 
     public static Location getPlain() {
         Location f = getCustom("plainsignyellow", new int[][]{{5, 1}, {1, 0}, {17, 3}});
+        f.name = "Plains";
         return f;
     }
 

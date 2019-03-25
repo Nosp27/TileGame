@@ -79,8 +79,7 @@ public class LocationSprite extends Sprite {
                 continue;
 
             final int ii = i;
-            File requiredFile = Arrays.asList(Objects.requireNonNull((new File(borderDirectory)).listFiles()))
-                    .stream().filter(x -> x.getName().contains(sides[ii])).findFirst().get();
+            File requiredFile = Arrays.stream(Objects.requireNonNull((new File(borderDirectory)).listFiles())).filter(x -> x.getName().contains(sides[ii])).findFirst().get();
 
             try {
                 BufferedImage border = ImageIO.read(requiredFile);

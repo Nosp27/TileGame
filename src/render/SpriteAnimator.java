@@ -1,7 +1,5 @@
 package render;
 
-import java.awt.image.BufferedImage;
-
 public abstract class SpriteAnimator {
     protected Sprite animated;
 
@@ -9,11 +7,7 @@ public abstract class SpriteAnimator {
         this.animated = animated;
     }
 
-    private void setPath(String s){
-        animated.readImage(s);
-    }
-
     protected void setFrame(String s){
-        setPath(s);
+        animated.readImage(s);
     }
 }

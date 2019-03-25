@@ -4,7 +4,7 @@ import render.Sprite;
 
 import java.awt.*;
 
-public class UI_Sprite extends Sprite {
+public abstract class UI_Sprite extends Sprite {
     protected boolean isVisible;
 
     protected void setVisible(boolean v) {
