@@ -2,6 +2,11 @@ package heroes;
 
 import mechanics.fight.MonsterFight;
 
+/**
+ * Buff is something that gives additional
+ * adjustments to hero parameters
+ * e.g Buff can improve {@code power} or increase/decrease {@code Sin} value
+ */
 public abstract class Buff {
     private static int counter = 0;
     private int id;

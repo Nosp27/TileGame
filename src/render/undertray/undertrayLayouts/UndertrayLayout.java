@@ -5,12 +5,13 @@ import map.locations.Location;
 import render.UI.UI_Panel;
 import render.UI.UI_Sprite;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public interface UndertrayLayout {
-    void selectLocation(Location l);
-    void selectHero(Hero h);
+    public abstract void selectLocation(Location l);
+    public abstract void selectHero(Hero h);
 
     void draw(Graphics g);
 }

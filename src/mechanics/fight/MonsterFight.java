@@ -86,7 +86,7 @@ public class MonsterFight {
 
     private void processRetreat() {
         float successChance = .3f + hero.getRetreatBonus();
-        float woundChance = .4f - hero.getRetreatBonus(); // ?
+        float woundChance = .4f - hero.getRetreatBonus(); // TODO: ?
 
         float random = ThreadLocalRandom.current().nextFloat();
         if (random < successChance) {
@@ -122,6 +122,7 @@ public class MonsterFight {
                 if (calculateWinner()) {
                     //boost up hero
                     System.out.println("hero win");
+                    monster.kill();
                     gain.run();
                 } else {
                     System.out.println("hero lose");

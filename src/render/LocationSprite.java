@@ -1,7 +1,9 @@
 package render;
 
-import map.MapGenerator;
 import map.locations.Location;
+import map.locations.LocationListener;
+import monsters.Monster;
+import render.animators.LocationAnimator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,13 +13,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class LocationSprite extends Sprite {
+public class LocationSprite extends Sprite implements LocationListener {
     private static final String tileDirectory = "res/tiles/";
     private static final String borderDirectory = "res/tiles/borders";
+    public static final String coveredPath = "res/tiles/closed.png";
+
     private List<Image> borderSprites;
 
     private Location location;
     LocationAnimator anim;
+
+    private boolean isDiscovred = false;
+
+    private MonsterSprite mSprite;
 
     public Location getLocation() {
         return location;
@@ -26,10 +34,12 @@ public class LocationSprite extends Sprite {
     public LocationSprite(Location _location) {
         super(null, -100);
         location = _location;
-        readImage(getFirstFrame());
-        anim = new LocationAnimator(this);
-        initAnimationFrames();
-        anim.play();
+        location.addLocationListener(this);
+
+        if(location.isDiscovered())
+            onDiscover(location);
+        else
+        readImage(coveredPath);
     }
 
     @Override
@@ -67,15 +77,15 @@ public class LocationSprite extends Sprite {
         if (borderSprites == null)
             borderSprites = new ArrayList<>();
 
-        if(getColor(location).equals("green"))
+        if (getColor(location).equals("green"))
             return;
 
         String[] sides = new String[]{"left", "up", "right", "down"};
 
         int minSize = Math.min(near.size(), sides.length);
 
-        for(int i = 0; i < minSize; ++i){
-            if(getColor(near.get(i)).equals(getColor(location)))
+        for (int i = 0; i < minSize; ++i) {
+            if (getColor(near.get(i)).equals(getColor(location)))
                 continue;
 
             final int ii = i;
@@ -90,12 +100,12 @@ public class LocationSprite extends Sprite {
         }
     }
 
-    private static String getColor(Location l){
+    private static String getColor(Location l) {
         String pathName = l.getPathName();
 
         String[] colors = new String[]{"green", "yellow"};
-        for(int i = 0; i < colors.length; ++i){
-            if(pathName.contains(colors[i]))
+        for (int i = 0; i < colors.length; ++i) {
+            if (pathName.contains(colors[i]))
                 return colors[i];
         }
         return colors[0];
@@ -104,9 +114,29 @@ public class LocationSprite extends Sprite {
     @Override
     public void draw(Graphics g, int x, int y, int w, int h) {
         super.draw(g, x, y, w, h);
+
+        if(!isDiscovred)
+            return;
+
         if (borderSprites != null) {
             for (Image img : borderSprites)
                 g.drawImage(img, x, y, w, h, null);
         }
+
+        if (mSprite != null)
+            mSprite.draw(g, x, y, w, h);
+    }
+
+    public void onDiscover(Location l) {
+        isDiscovred = true;
+        readImage(getFirstFrame());
+        anim = new LocationAnimator(this);
+        initAnimationFrames();
+        anim.play();
+    }
+
+    @Override
+    public void onMonsterGot(Location l, Monster m) {
+        mSprite = new MonsterSprite(m);
     }
 }

@@ -7,6 +7,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Monster {
+
+    private List<MonsterListener> listeners = new LinkedList<>();
+
+    private boolean dead;
+
+    public void kill(){
+        dead = true;
+        for(MonsterListener l : listeners)
+            l.onKill(this);
+    }
+
+    public boolean isDead(){
+        return dead;
+    }
+
+    String path;
+    public String getPath(){
+        return path;
+    }
+
     Monster(){
         prizeBuffs = new LinkedList<>();
         defubbs = new LinkedList<>();
@@ -38,5 +58,9 @@ public class Monster {
 
     public int getStrength() {
         return strength;
+    }
+
+    public void addListener(MonsterListener listener){
+        listeners.add(listener);
     }
 }

@@ -55,7 +55,7 @@ public abstract class Sprite {
 
     }
 
-    void readImage(String path){
+    public void readImage(String path){
         try{
             image = ImageIO.read(new File(path));
             rect = new Rectangle(image.getWidth(), image.getHeight());

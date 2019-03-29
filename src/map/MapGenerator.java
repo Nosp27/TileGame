@@ -4,15 +4,13 @@ import heroes.Hero;
 import heroes.HeroFactory;
 import javafx.util.Pair;
 import map.locations.Location;
-import map.locations.LocationFabric;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import map.locations.LocationFactory;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class MapGenerator {
     int size;
@@ -28,12 +26,12 @@ public class MapGenerator {
         this.size = size;
         map = new Location[size][size];
         int towerCoord = size / 2;
-        map[towerCoord][towerCoord] = LocationFabric.getTower();
+        map[towerCoord][towerCoord] = LocationFactory.getTower();
 
         for (int i = 0; i < size; ++i)
             for (int j = 0; j < size; ++j) {
                 if (map[i][j] == null) {
-                    map[i][j] = LocationFabric.getRandomLocation();
+                    map[i][j] = LocationFactory.getRandomLocation();
                 }
             }
     }
@@ -108,6 +106,13 @@ public class MapGenerator {
 
             return newRoute;
         }
+    }
+
+    public List<Location> getNearbyLocations(int x, int y){
+        List<Location> result = new LinkedList<>();
+        for(Point p : getNearby(x, y))
+            result.add(map[p.y][p.x]);
+        return result;
     }
 
     private List<Point> getNearby(int x, int y) {

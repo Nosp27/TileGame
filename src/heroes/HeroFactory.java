@@ -4,6 +4,9 @@ import map.MapGenerator;
 
 import java.util.NoSuchElementException;
 
+/**
+ * Spawns different heroes easily
+ */
 public class HeroFactory {
     static final String directory = "res/heroes/";
 

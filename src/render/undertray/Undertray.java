@@ -14,23 +14,25 @@ public class Undertray extends JPanel {
     UI_Panel background;
     public UndertrayLayout layout;
 
-    Undertray(){}
+    Undertray() {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    }
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
-        background.draw(g, 0,0,getWidth(), getHeight());
+        super.paintComponent(g);
+        background.draw(g, 0, 0, getWidth(), getHeight());
 
-        if(layout!=null)
+        if (layout != null)
             layout.draw(g);
     }
 
-    public void selectLocation(Location l){
+    public void selectLocation(Location l) {
         LayoutAbstractFactory.selectLocation(l, this);
         repaint();
     }
 
-    public void selectHero(Hero h){
+    public void selectHero(Hero h) {
         LayoutAbstractFactory.selectHero(h, this);
     }
 }

@@ -8,8 +8,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.awt.*;
 
 public abstract class LayoutAbstractFactory {
-    public static void initBaseLayout(Undertray u) {
-        u.layout = new UndertrayLayout() {
+    private static UndertrayLayout initBaseLayout(Undertray u) {
+        return new UndertrayLayout() {
             @Override
             public void selectLocation(Location l) {
                 throw new RuntimeException();
@@ -22,9 +22,12 @@ public abstract class LayoutAbstractFactory {
 
             @Override
             public void draw(Graphics g) {
+
             }
         };
     }
+
+    ;
 
     public static void selectLocation(Location l, Undertray u) {
         executeCommonAction(LayoutType.LOCATION, u, l);
@@ -48,7 +51,7 @@ public abstract class LayoutAbstractFactory {
 
                 return;
             } catch (NullPointerException e) {
-                initBaseLayout(u);
+                u.layout = initBaseLayout(u);
             } catch (RuntimeException e) {
                 u.layout = getSufficientUT(lt);
             }
